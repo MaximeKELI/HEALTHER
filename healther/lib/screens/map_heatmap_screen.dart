@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../services/geofencing_service.dart';
 
 class MapHeatmapScreen extends StatefulWidget {

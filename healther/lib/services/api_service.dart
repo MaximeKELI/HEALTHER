@@ -687,6 +687,223 @@ class ApiService {
     final List<dynamic> data = json.decode(response.body);
     return data.map((json) => json as Map<String, dynamic>).toList();
   }
+
+  // ========== TASKS ==========
+  
+  Future<int> createTask({
+    required String title,
+    String? description,
+    int? diagnosticId,
+    int? assignedTo,
+    int priority = 5,
+    String? dueDate,
+    Map<String, dynamic>? metadata,
+  }) async {
+    final response = await _executeWithRetry(() async {
+      return await http.post(
+        Uri.parse('$baseUrl/tasks'),
+        headers: _headers,
+        body: json.encode({
+          'title': title,
+          'description': description,
+          'diagnostic_id': diagnosticId,
+          'assigned_to': assignedTo,
+          'priority': priority,
+          'due_date': dueDate,
+          'metadata': metadata ?? {},
+        }),
+      );
+    });
+
+    final data = json.decode(response.body);
+    return data['id'] as int;
+  }
+
+  Future<List<Map<String, dynamic>>> getTasks({
+    String? status,
+  }) async {
+    final queryParams = <String, String>{};
+    if (status != null) queryParams['status'] = status;
+
+    final uri = Uri.parse('$baseUrl/tasks').replace(queryParameters: queryParams);
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => json as Map<String, dynamic>).toList();
+  }
+
+  Future<void> updateTaskStatus(int taskId, String status) async {
+    final response = await _executeWithRetry(() async {
+      return await http.patch(
+        Uri.parse('$baseUrl/tasks/$taskId/status'),
+        headers: _headers,
+        body: json.encode({'status': status}),
+      );
+    });
+
+    await _handleError(response);
+  }
+
+  Future<List<Map<String, dynamic>>> getOverdueTasks() async {
+    final response = await _executeWithRetry(() async {
+      return await http.get(
+        Uri.parse('$baseUrl/tasks/overdue'),
+        headers: _headers,
+      );
+    });
+
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => json as Map<String, dynamic>).toList();
+  }
+
+  // ========== NOTIFICATIONS ==========
+  
+  Future<List<Map<String, dynamic>>> getNotifications({
+    int limit = 50,
+    int offset = 0,
+    bool unreadOnly = false,
+  }) async {
+    final queryParams = <String, String>{
+      'limit': limit.toString(),
+      'offset': offset.toString(),
+      'unread_only': unreadOnly.toString(),
+    };
+
+    final uri = Uri.parse('$baseUrl/notifications').replace(queryParameters: queryParams);
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => json as Map<String, dynamic>).toList();
+  }
+
+  Future<void> markNotificationAsRead(int notificationId) async {
+    final response = await _executeWithRetry(() async {
+      return await http.put(
+        Uri.parse('$baseUrl/notifications/$notificationId/read'),
+        headers: _headers,
+      );
+    });
+
+    await _handleError(response);
+  }
+
+  Future<void> markAllNotificationsAsRead() async {
+    final response = await _executeWithRetry(() async {
+      return await http.put(
+        Uri.parse('$baseUrl/notifications/read-all'),
+        headers: _headers,
+      );
+    });
+
+    await _handleError(response);
+  }
+
+  Future<int> getUnreadNotificationCount() async {
+    final response = await _executeWithRetry(() async {
+      return await http.get(
+        Uri.parse('$baseUrl/notifications/unread-count'),
+        headers: _headers,
+      );
+    });
+
+    final data = json.decode(response.body);
+    return data['count'] as int? ?? 0;
+  }
+
+  // ========== GEOFENCING ==========
+  
+  Future<List<Map<String, dynamic>>> getActiveGeofences() async {
+    final response = await _executeWithRetry(() async {
+      return await http.get(
+        Uri.parse('$baseUrl/geofencing'),
+        headers: _headers,
+      );
+    });
+
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => json as Map<String, dynamic>).toList();
+  }
+
+  Future<Map<String, dynamic>> checkGeofencingAlerts({
+    String? region,
+    String? dateDebut,
+    String? dateFin,
+  }) async {
+    final queryParams = <String, String>{};
+    if (region != null) queryParams['region'] = region;
+    if (dateDebut != null) queryParams['date_debut'] = dateDebut;
+    if (dateFin != null) queryParams['date_fin'] = dateFin;
+
+    final uri = Uri.parse('$baseUrl/geofencing/check-alerts')
+        .replace(queryParameters: queryParams);
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    return json.decode(response.body);
+  }
+
+  Future<List<Map<String, dynamic>>> getGeofencingHeatmap({
+    String? region,
+    String? maladieType,
+    String? dateDebut,
+    String? dateFin,
+  }) async {
+    final queryParams = <String, String>{};
+    if (region != null) queryParams['region'] = region;
+    if (maladieType != null) queryParams['maladie_type'] = maladieType;
+    if (dateDebut != null) queryParams['date_debut'] = dateDebut;
+    if (dateFin != null) queryParams['date_fin'] = dateFin;
+
+    final uri = Uri.parse('$baseUrl/geofencing/heatmap')
+        .replace(queryParameters: queryParams);
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => json as Map<String, dynamic>).toList();
+  }
+
+  // ========== OFFLINE QUEUE ==========
+  
+  Future<List<Map<String, dynamic>>> getOfflineQueueItems() async {
+    final response = await _executeWithRetry(() async {
+      return await http.get(
+        Uri.parse('$baseUrl/offline-queue'),
+        headers: _headers,
+      );
+    });
+
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => json as Map<String, dynamic>).toList();
+  }
+
+  Future<void> syncOfflineQueueItem(int itemId) async {
+    final response = await _executeWithRetry(() async {
+      return await http.post(
+        Uri.parse('$baseUrl/offline-queue/sync/$itemId'),
+        headers: _headers,
+      );
+    });
+
+    await _handleError(response);
+  }
+
+  Future<void> deleteOfflineQueueItem(int itemId) async {
+    final response = await _executeWithRetry(() async {
+      return await http.delete(
+        Uri.parse('$baseUrl/offline-queue/$itemId'),
+        headers: _headers,
+      );
+    });
+
+    await _handleError(response);
+  }
 }
 
 // Exception personnalisée pour token expiré

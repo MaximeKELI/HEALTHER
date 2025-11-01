@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'ml_feedback_screen.dart';
 import '../models/diagnostic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +122,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 )
                               : null,
                           onTap: () {
-                            // TODO: Naviguer vers les détails du diagnostic
+                            // Naviguer vers le feedback ML
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MLFeedbackScreen(
+                                  diagnostic: diagnostic,
+                                ),
+                              ),
+                            );
                           },
                         ),
                       );
@@ -131,5 +140,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 }
+
 
 

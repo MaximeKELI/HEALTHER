@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'providers/diagnostic_provider.dart';
 import 'services/localization_service.dart';
+import 'providers/ml_feedback_provider.dart';
 import 'services/accessibility_service.dart';
+import 'providers/notification_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> _initializeServices() async {
@@ -82,6 +84,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => DiagnosticProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => MLFeedbackProvider()),
       ],
       child: MaterialApp(
         title: 'HEALTHER',

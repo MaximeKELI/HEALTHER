@@ -1,16 +1,26 @@
-# <p align="center">🏥 <span style="color:#2563eb;font-family:'Italianno',cursive;font-size:2.5em">HEALTHER</span></p>
+<div align="center">
 
-<p align="center">
-  <strong>Plateforme de Diagnostic Médical Intelligente pour la Santé Publique</strong>
-</p>
+# 🏥 <span style="color:#2563eb;font-family:'Italianno',cursive;font-size:2.5em;animation: pulse 2s infinite">HEALTHER</span>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/Backend-Node.js-green.svg" alt="Backend">
-  <img src="https://img.shields.io/badge/Frontend-Flutter-02569B.svg" alt="Frontend">
-  <img src="https://img.shields.io/badge/Database-SQLite-003B57.svg" alt="Database">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
-</p>
+**Plateforme de Diagnostic Médical Intelligente pour la Santé Publique**
+
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=for-the-badge&logo=version)](https://github.com/votre-repo/HEALTHER)
+[![Backend](https://img.shields.io/badge/Backend-Node.js-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![Frontend](https://img.shields.io/badge/Frontend-Flutter-02569B?style=for-the-badge&logo=flutter)](https://flutter.dev/)
+[![Database](https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite)](https://www.sqlite.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Active-success.svg?style=for-the-badge)](https://github.com/votre-repo/HEALTHER)
+
+![Build](https://img.shields.io/github/workflow/status/votre-repo/HEALTHER/CI?style=for-the-badge)
+![Issues](https://img.shields.io/github/issues/votre-repo/HEALTHER?style=for-the-badge&color=blue)
+![Pull Requests](https://img.shields.io/github/issues-pr/votre-repo/HEALTHER?style=for-the-badge&color=green)
+![Code Size](https://img.shields.io/github/languages/code-size/votre-repo/HEALTHER?style=for-the-badge)
+
+[![Stars](https://img.shields.io/github/stars/votre-repo/HEALTHER?style=social)](https://github.com/votre-repo/HEALTHER/stargazers)
+[![Forks](https://img.shields.io/github/forks/votre-repo/HEALTHER?style=social)](https://github.com/votre-repo/HEALTHER/network/members)
+[![Watchers](https://img.shields.io/github/watchers/votre-repo/HEALTHER?style=social)](https://github.com/votre-repo/HEALTHER/watchers)
+
+</div>
 
 ---
 

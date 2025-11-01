@@ -4,6 +4,9 @@ import 'chatbot_screen.dart';
 import 'settings_screen.dart';
 import 'dashboard_screen.dart';
 import 'diagnostic_screen.dart';
+import 'map_heatmap_screen.dart';
+import 'notifications_screen.dart';
+import 'barcode_scanner_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -33,6 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('HEALTHER'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NotificationsScreen()),
+              );
+            },
+            tooltip: 'Notifications',
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -116,6 +129,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.map),
+              title: const Text('Carte Heatmap'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MapHeatmapScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.qr_code_scanner),
+              title: const Text('Scanner Code-barres'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BarcodeScannerScreen(
+                      onBarcodeScanned: (barcode, format) {
+                        // TODO: Traiter le code-barres scanné
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Code-barres scanné: $barcode')),
+                        );
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
                 );
               },
             ),

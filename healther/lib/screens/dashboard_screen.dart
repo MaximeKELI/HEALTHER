@@ -1,3 +1,4 @@
+import 'map_heatmap_screen.dart';
 import '../services/api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +43,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.map),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MapHeatmapScreen()),
+              );
+            },
+            tooltip: 'Carte Heatmap',
+          ),
+        ],
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _stats == null
