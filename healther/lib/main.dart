@@ -10,6 +10,8 @@ import 'services/localization_service.dart';
 import 'providers/ml_feedback_provider.dart';
 import 'services/accessibility_service.dart';
 import 'providers/notification_provider.dart';
+import 'providers/gamification_provider.dart';
+import 'services/realtime_stats_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> _initializeServices() async {
@@ -86,6 +88,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DiagnosticProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => MLFeedbackProvider()),
+        ChangeNotifierProvider(create: (_) => GamificationProvider()),
+        ChangeNotifierProvider(create: (_) => RealtimeStatsService()),
       ],
       child: MaterialApp(
         title: 'HEALTHER',

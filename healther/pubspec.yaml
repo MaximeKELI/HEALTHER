@@ -77,6 +77,24 @@ dependencies:
   qr_flutter: ^4.1.0
   path_provider: ^2.1.5
   intl_utils: ^2.8.12
+  
+  # Graphiques animés pour dashboard
+  fl_chart: ^0.69.0
+  
+  # Carte interactive
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  
+  # Speech/Voice (pour assistant vocal)
+  speech_to_text: ^7.0.0
+  flutter_tts: ^4.0.2
+  
+  # Animations avancées
+  animations: ^2.0.11
+  lottie: ^3.1.2
+  
+  # Compression d'images pour offline
+  flutter_image_compress: ^2.3.0
 
 dev_dependencies:
   flutter_test:
