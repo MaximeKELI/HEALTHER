@@ -59,6 +59,9 @@ class ApiService {
 
   // Getter public pour headers (pour les autres services)
   Map<String, String> get headers => _headers;
+  
+  // Getter public pour baseUrl (pour les autres services)
+  String get baseUrl => _baseUrl;
 
   // Exécuter une requête avec retry automatique après refresh (public pour les autres services)
   Future<http.Response> _executeWithRetry(Future<http.Response> Function() requestFn) async {
@@ -903,6 +906,56 @@ class ApiService {
     });
 
     await _handleError(response);
+  }
+
+  // ==================== PREDICTION ====================
+
+  /// Prédire les épidémies futures
+  Future<Map<String, dynamic>> predictEpidemics({
+    String? region,
+    String? maladieType,
+    int daysAhead = 7,
+    bool includeHistory = true,
+  }) async {
+    final queryParams = <String, String>{};
+    if (region != null) queryParams['region'] = region;
+    if (maladieType != null) queryParams['maladieType'] = maladieType;
+    queryParams['daysAhead'] = daysAhead.toString();
+    queryParams['includeHistory'] = includeHistory.toString();
+
+    final uri = Uri.parse('$baseUrl/prediction/epidemics').replace(
+      queryParameters: queryParams,
+    );
+
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    final data = json.decode(response.body);
+    return data;
+  }
+
+  /// Détecter les anomalies dans les données
+  Future<Map<String, dynamic>> detectAnomalies({
+    String? region,
+    String? maladieType,
+    int days = 7,
+  }) async {
+    final queryParams = <String, String>{};
+    if (region != null) queryParams['region'] = region;
+    if (maladieType != null) queryParams['maladieType'] = maladieType;
+    queryParams['days'] = days.toString();
+
+    final uri = Uri.parse('$baseUrl/prediction/anomalies').replace(
+      queryParameters: queryParams,
+    );
+
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    final data = json.decode(response.body);
+    return data;
   }
 }
 

@@ -69,6 +69,7 @@ const chatbotRoutes = require('./routes/chatbot');
 const monitoringRoutes = require('./routes/monitoring');
 const fhirRoutes = require('./routes/fhir');
 const voiceAssistantRoutes = require('./routes/voice_assistant');
+const predictionRoutes = require('./routes/prediction');
 
 // Importer monitoringService APRÈS les autres routes
 const monitoringService = require('./services/monitoring_service');
@@ -100,6 +101,7 @@ app.use('/api/chatbot', chatbotRoutes);
 app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/fhir', fhirRoutes);
 app.use('/api/voice-assistant', voiceAssistantRoutes);
+app.use('/api/prediction', predictionRoutes);
 app.use('/metrics', monitoringRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

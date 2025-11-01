@@ -95,6 +95,30 @@ dependencies:
   
   # Compression d'images pour offline
   flutter_image_compress: ^2.3.0
+  
+  # Authentification biométrique
+  local_auth: ^2.2.0
+  
+  # Export PDF/Excel pour rapports
+  printing: ^5.13.0
+  excel: ^4.0.3
+  path_provider_platform_interface: ^2.1.2
+  
+  # OCR pour scan de prescriptions
+  google_ml_kit: ^0.18.0
+  
+  # Traduction multilingue (nécessite API key Google Translate)
+  # google_translate: ^3.0.0  # Package n'existe pas, utiliser API REST directement
+  
+  # Video streaming pour télémédecine (nécessite configuration spéciale)
+  # flutter_webrtc: ^0.9.48  # Complexe à configurer, mettre en commentaire pour l'instant
+  
+  # Notifications push (Firebase)
+  firebase_core: ^3.6.0
+  firebase_messaging: ^15.1.3
+  
+  # Partage de fichiers
+  share_plus: ^10.1.2
 
 dev_dependencies:
   flutter_test:
