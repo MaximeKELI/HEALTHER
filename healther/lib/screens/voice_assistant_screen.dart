@@ -40,33 +40,67 @@ class _VoiceAssistantScreenState extends State<VoiceAssistantScreen> {
   Future<void> _handleVoiceCommand(String command) async {
     final lowerCommand = command.toLowerCase();
 
-    if (lowerCommand.contains('statistiques') || lowerCommand.contains('stats')) {
-      try {
-        final apiService = ApiService();
-        final stats = await apiService.getStats();
-        await _voiceService.speakStats(stats);
-        setState(() {
-          _conversation.add('Assistant: Statistiques lues à voix haute');
-        });
-      } catch (e) {
-        await _voiceService.speak('Désolé, je ne peux pas charger les statistiques pour le moment.');
+    // Utiliser Gemini pour une réponse intelligente
+    try {
+      final response = await _voiceService.chatWithGemini(
+        command,
+        conversationHistory: _conversation.map((msg) {
+          final isUser = msg.startsWith('Vous:');
+          return {
+            'role': isUser ? 'user' : 'assistant',
+            'text': isUser ? msg.replaceFirst('Vous: ', '') : msg.replaceFirst('Assistant: ', ''),
+          };
+        }).toList(),
+      );
+
+      final responseText = response['text'] as String? ?? '';
+      
+      // Parler la réponse (TTS standard pour l'instant)
+      await _voiceService.speak(responseText);
+
+      setState(() {
+        _conversation.add('Assistant: $responseText');
+      });
+
+      // Actions spéciales basées sur la réponse
+      if (lowerCommand.contains('statistiques') || lowerCommand.contains('stats')) {
+        try {
+          final apiService = ApiService();
+          final stats = await apiService.getStats();
+          await _voiceService.speakStats(stats);
+        } catch (e) {
+          // Déjà géré par la réponse Gemini
+        }
       }
-    } else if (lowerCommand.contains('diagnostic') || lowerCommand.contains('nouveau')) {
-      await _voiceService.speak('Pour créer un diagnostic, veuillez utiliser l\'écran de diagnostic.');
-      setState(() {
-        _conversation.add('Assistant: Redirection vers diagnostic');
-      });
-      // TODO: Naviguer vers l'écran de diagnostic
-    } else if (lowerCommand.contains('bonjour') || lowerCommand.contains('salut')) {
-      await _voiceService.speak('Bonjour ! Comment puis-je vous aider aujourd\'hui ?');
-      setState(() {
-        _conversation.add('Assistant: Salutation');
-      });
-    } else {
-      await _voiceService.speak('Désolé, je n\'ai pas compris. Essayez "statistiques" ou "diagnostic".');
-      setState(() {
-        _conversation.add('Assistant: Commande non reconnue');
-      });
+    } catch (e) {
+      // Fallback sur les commandes simples
+      if (lowerCommand.contains('statistiques') || lowerCommand.contains('stats')) {
+        try {
+          final apiService = ApiService();
+          final stats = await apiService.getStats();
+          await _voiceService.speakStats(stats);
+          setState(() {
+            _conversation.add('Assistant: Statistiques lues à voix haute');
+          });
+        } catch (e) {
+          await _voiceService.speak('Désolé, je ne peux pas charger les statistiques pour le moment.');
+        }
+      } else if (lowerCommand.contains('diagnostic') || lowerCommand.contains('nouveau')) {
+        await _voiceService.speak('Pour créer un diagnostic, veuillez utiliser l\'écran de diagnostic.');
+        setState(() {
+          _conversation.add('Assistant: Redirection vers diagnostic');
+        });
+      } else if (lowerCommand.contains('bonjour') || lowerCommand.contains('salut')) {
+        await _voiceService.speak('Bonjour ! Comment puis-je vous aider aujourd\'hui ?');
+        setState(() {
+          _conversation.add('Assistant: Salutation');
+        });
+      } else {
+        await _voiceService.speak('Désolé, je n\'ai pas compris. Essayez "statistiques" ou "diagnostic".');
+        setState(() {
+          _conversation.add('Assistant: Commande non reconnue');
+        });
+      }
     }
   }
 

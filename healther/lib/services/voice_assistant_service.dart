@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
+import 'api_service.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -52,8 +55,8 @@ class VoiceAssistantService with ChangeNotifier {
     });
   }
 
-  /// Parler un texte
-  Future<void> speak(String text, {String? language}) async {
+  /// Parler un texte (avec option Gemini audio natif)
+  Future<void> speak(String text, {String? language, bool useGemini = false}) async {
     try {
       if (language != null && language != _currentLanguage) {
         await _tts.setLanguage(language);
@@ -63,6 +66,24 @@ class VoiceAssistantService with ChangeNotifier {
       _isSpeaking = true;
       notifyListeners();
 
+      // Si Gemini est activé, essayer de générer l'audio natif d'abord
+      if (useGemini) {
+        try {
+          final audioData = await generateGeminiAudioResponse(text);
+          if (audioData != null) {
+            // TODO: Jouer l'audio Gemini (nécessite un player audio)
+            // Pour l'instant, fallback sur TTS standard
+            await _tts.speak(text);
+            _isSpeaking = false;
+            notifyListeners();
+            return;
+          }
+        } catch (e) {
+          print('Erreur audio Gemini, fallback sur TTS: $e');
+        }
+      }
+
+      // Fallback sur TTS standard
       await _tts.speak(text);
     } catch (e) {
       _isSpeaking = false;
@@ -135,9 +156,9 @@ class VoiceAssistantService with ChangeNotifier {
   }
 
   /// Lire les statistiques à voix haute
-  Future<void> speakStats(Map<String, dynamic> stats) async {
+  Future<void> speakStats(Map<String, dynamic> stats, {bool useGemini = false}) async {
     final text = _formatStatsForSpeech(stats);
-    await speak(text);
+    await speak(text, useGemini: useGemini);
   }
 
   String _formatStatsForSpeech(Map<String, dynamic> stats) {
@@ -148,6 +169,134 @@ class VoiceAssistantService with ChangeNotifier {
 
     return 'Statistiques globales: $total cas au total, dont $positifs cas positifs. '
            'Le taux de positivité est de ${taux.toStringAsFixed(1)} pourcent.';
+  }
+
+  /// Transcrire un fichier audio via l'API Gemini
+  Future<String> transcribeAudio(List<int> audioBytes, String mimeType) async {
+    try {
+      final apiService = ApiService();
+      final baseUrl = apiService.baseUrl.replaceAll('/api', '');
+      final uri = Uri.parse('$baseUrl/api/voice-assistant/transcribe');
+
+      final request = http.MultipartRequest('POST', uri);
+      request.headers.addAll(apiService.headers);
+      request.files.add(http.MultipartFile.fromBytes(
+        'audio',
+        audioBytes,
+        filename: 'audio.wav',
+        contentType: mimeType.contains('pcm')
+            ? const {'Content-Type': 'audio/pcm'}
+            : const {'Content-Type': 'audio/wav'},
+      ));
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['text'] as String? ?? '';
+      } else {
+        throw Exception('Erreur transcription: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erreur transcription Gemini: $e');
+      rethrow;
+    }
+  }
+
+  /// Chat conversationnel avec Gemini
+  Future<Map<String, dynamic>> chatWithGemini(
+    String message, {
+    List<Map<String, dynamic>>? conversationHistory,
+  }) async {
+    try {
+      final apiService = ApiService();
+      final baseUrl = apiService.baseUrl.replaceAll('/api', '');
+      final uri = Uri.parse('$baseUrl/api/voice-assistant/chat');
+
+      final response = await http.post(
+        uri,
+        headers: apiService.headers,
+        body: json.encode({
+          'message': message,
+          'conversationHistory': conversationHistory ?? [],
+        }),
+      );
+
+      if (response.statusCode >= 400) {
+        throw Exception('Erreur chat: ${response.statusCode}');
+      }
+
+      final data = json.decode(response.body);
+      return {
+        'text': data['text'] as String? ?? '',
+        'audioBase64': data['audioBase64'] as String?,
+      };
+    } catch (e) {
+      print('Erreur chat Gemini: $e');
+      rethrow;
+    }
+  }
+
+  /// Générer une réponse audio via Gemini
+  Future<List<int>?> generateGeminiAudioResponse(String text, {String? context}) async {
+    try {
+      final apiService = ApiService();
+      final baseUrl = apiService.baseUrl.replaceAll('/api', '');
+      final uri = Uri.parse('$baseUrl/api/voice-assistant/speak');
+
+      final response = await http.post(
+        uri,
+        headers: apiService.headers,
+        body: json.encode({
+          'text': text,
+          'context': context,
+        }),
+      );
+
+      if (response.statusCode >= 400) {
+        print('Erreur génération audio: ${response.statusCode}');
+        return null;
+      }
+
+      final data = json.decode(response.body);
+      final audioBase64 = data['audioBase64'] as String?;
+      if (audioBase64 != null) {
+        return base64Decode(audioBase64);
+      }
+      return null;
+    } catch (e) {
+      print('Erreur génération audio Gemini: $e');
+      return null;
+    }
+  }
+
+  /// Analyser une description vocale de diagnostic
+  Future<Map<String, dynamic>> analyzeDiagnosticDescription(
+    String description,
+  ) async {
+    try {
+      final apiService = ApiService();
+      final baseUrl = apiService.baseUrl.replaceAll('/api', '');
+      final uri = Uri.parse('$baseUrl/api/voice-assistant/analyze-diagnostic');
+
+      final response = await http.post(
+        uri,
+        headers: apiService.headers,
+        body: json.encode({
+          'description': description,
+        }),
+      );
+
+      if (response.statusCode >= 400) {
+        throw Exception('Erreur analyse: ${response.statusCode}');
+      }
+
+      return json.decode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      print('Erreur analyse diagnostic Gemini: $e');
+      rethrow;
+    }
   }
 
   /// Commandes vocales pour navigation
