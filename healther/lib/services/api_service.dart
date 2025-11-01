@@ -960,6 +960,79 @@ class ApiService {
     final data = json.decode(response.body);
     return data;
   }
+
+  // ==================== ALERTS ====================
+
+  /// Vérifier les seuils et obtenir les alertes
+  Future<Map<String, dynamic>> checkAlerts({
+    String? region,
+    String? maladieType,
+    int days = 7,
+  }) async {
+    final queryParams = <String, String>{};
+    if (region != null) queryParams['region'] = region;
+    if (maladieType != null) queryParams['maladieType'] = maladieType;
+    queryParams['days'] = days.toString();
+
+    final uri = Uri.parse('$baseUrl/alerts/check').replace(
+      queryParameters: queryParams,
+    );
+
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    final data = json.decode(response.body);
+    return data;
+  }
+
+  /// Configurer un seuil personnalisé
+  Future<Map<String, dynamic>> setAlertThreshold({
+    required String metric,
+    required int warningLevel,
+    required int criticalLevel,
+    String? region,
+    String? maladieType,
+  }) async {
+    final response = await _executeWithRetry(() async {
+      return await http.post(
+        Uri.parse('$baseUrl/alerts/threshold'),
+        headers: _headers,
+        body: json.encode({
+          'metric': metric,
+          'warningLevel': warningLevel,
+          'criticalLevel': criticalLevel,
+          'region': region,
+          'maladieType': maladieType,
+        }),
+      );
+    });
+
+    final data = json.decode(response.body);
+    return data;
+  }
+
+  /// Obtenir l'historique des alertes
+  Future<Map<String, dynamic>> getAlertHistory({
+    int limit = 50,
+    int offset = 0,
+  }) async {
+    final queryParams = <String, String>{
+      'limit': limit.toString(),
+      'offset': offset.toString(),
+    };
+
+    final uri = Uri.parse('$baseUrl/alerts/history').replace(
+      queryParameters: queryParams,
+    );
+
+    final response = await _executeWithRetry(() async {
+      return await http.get(uri, headers: _headers);
+    });
+
+    final data = json.decode(response.body);
+    return data;
+  }
 }
 
 // Exception personnalisée pour token expiré

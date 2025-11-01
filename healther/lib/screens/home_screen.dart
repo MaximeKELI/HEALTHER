@@ -1,14 +1,20 @@
+import 'quiz_screen.dart';
+import 'alerts_screen.dart';
 import 'history_screen.dart';
 import 'profile_screen.dart';
 import 'chatbot_screen.dart';
+import 'gallery_screen.dart';
 import 'settings_screen.dart';
 import 'dashboard_screen.dart';
+import 'analytics_screen.dart';
 import 'diagnostic_screen.dart';
+import 'prediction_screen.dart';
 import 'map_heatmap_screen.dart';
 import 'gamification_screen.dart';
 import 'notifications_screen.dart';
 import 'barcode_scanner_screen.dart';
 import 'voice_assistant_screen.dart';
+import 'ocr_prescription_screen.dart';
 import 'package:flutter/material.dart';
 import 'realtime_dashboard_screen.dart';
 import 'package:provider/provider.dart';
@@ -200,6 +206,73 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.analytics),
+              title: const Text('Analytics & Rapports'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AnalyticsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.description),
+              title: const Text('Scan Prescription'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OCRPrescriptionScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.trending_up),
+              title: const Text('Prédiction Épidémique'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PredictionScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.warning),
+              title: const Text('Alertes Proactives'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AlertsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Galerie de Photos'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const GalleryScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.quiz),
+              title: const Text('Quiz Éducatif'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const QuizScreen()),
+                );
+              },
+            ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('Profil'),

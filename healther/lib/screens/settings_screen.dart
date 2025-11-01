@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/localization_service.dart';
 import '../services/accessibility_service.dart';
 
@@ -131,6 +133,85 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onChanged: (value) async {
                     await _accessibilityService.setHapticEnabled(value);
                     setState(() => _hapticEnabled = value);
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Thème
+          Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.palette),
+                      SizedBox(width: 16),
+                      Text(
+                        'Thème',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Consumer<ThemeProvider>(
+                  builder: (context, themeProvider, child) {
+                    return Column(
+                      children: [
+                        // Mode sombre
+                        ListTile(
+                          title: const Text('Mode sombre'),
+                          subtitle: DropdownButton<ThemeMode>(
+                            value: themeProvider.themeMode,
+                            isExpanded: true,
+                            items: const [
+                              DropdownMenuItem(
+                                value: ThemeMode.system,
+                                child: Text('Système'),
+                              ),
+                              DropdownMenuItem(
+                                value: ThemeMode.light,
+                                child: Text('Clair'),
+                              ),
+                              DropdownMenuItem(
+                                value: ThemeMode.dark,
+                                child: Text('Sombre'),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              if (value != null) {
+                                themeProvider.setThemeMode(value);
+                              }
+                            },
+                          ),
+                        ),
+                        // Couleur primaire
+                        ListTile(
+                          title: const Text('Couleur primaire'),
+                          subtitle: Wrap(
+                            spacing: 10,
+                            children: ThemeProvider.presets.map((preset) {
+                              return ChoiceChip(
+                                label: Text(preset.name),
+                                selected: themeProvider.primaryColor == preset.primaryColor,
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    themeProvider.applyPreset(preset);
+                                  }
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    );
                   },
                 ),
               ],

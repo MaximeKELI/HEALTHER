@@ -3,6 +3,7 @@ import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'providers/diagnostic_provider.dart';
@@ -77,7 +78,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Services (singletons)
     final localizationService = LocalizationService();
-    final accessibilityService = AccessibilityService();
     
     // Initialiser les services en arrière-plan
     _initializeServices();
@@ -90,31 +90,46 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MLFeedbackProvider()),
         ChangeNotifierProvider(create: (_) => GamificationProvider()),
         ChangeNotifierProvider(create: (_) => RealtimeStatsService()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        title: 'HEALTHER',
-        debugShowCheckedModeBanner: false,
-        locale: localizationService.currentLocale,
-        supportedLocales: LocalizationService.supportedLocales,
-        localizationsDelegates: const [
-          AppLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        theme: accessibilityService.getTheme(ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
-            primary: Colors.blue,
-            secondary: Colors.green,
-          ),
-          useMaterial3: true,
-        )),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const AuthWrapper(),
-          '/login': (context) => const LoginScreen(),
-          '/home': (context) => const HomeScreen(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            title: 'HEALTHER',
+            debugShowCheckedModeBanner: false,
+            locale: localizationService.currentLocale,
+            supportedLocales: LocalizationService.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            theme: themeProvider.getTheme(ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: themeProvider.primaryColor,
+                primary: themeProvider.primaryColor,
+                secondary: themeProvider.secondaryColor,
+              ),
+              useMaterial3: true,
+            )),
+            darkTheme: themeProvider.getTheme(ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: themeProvider.primaryColor,
+                primary: themeProvider.primaryColor,
+                secondary: themeProvider.secondaryColor,
+                brightness: Brightness.dark,
+              ),
+              useMaterial3: true,
+            )),
+            themeMode: themeProvider.themeMode,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const AuthWrapper(),
+              '/login': (context) => const LoginScreen(),
+              '/home': (context) => const HomeScreen(),
+            },
+          );
         },
       ),
     );
