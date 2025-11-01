@@ -5,9 +5,12 @@ import 'settings_screen.dart';
 import 'dashboard_screen.dart';
 import 'diagnostic_screen.dart';
 import 'map_heatmap_screen.dart';
+import 'gamification_screen.dart';
 import 'notifications_screen.dart';
 import 'barcode_scanner_screen.dart';
+import 'voice_assistant_screen.dart';
 import 'package:flutter/material.dart';
+import 'realtime_dashboard_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 
@@ -122,6 +125,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ListTile(
+              leading: const Icon(Icons.dashboard_customize),
+              title: const Text('Dashboard Temps Réel'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RealtimeDashboardScreen()),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.chat_bubble),
               title: const Text('Chatbot IA'),
               onTap: () {
@@ -129,6 +143,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.emoji_events),
+              title: const Text('Gamification'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const GamificationScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.record_voice_over),
+              title: const Text('Assistant Vocal IA'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const VoiceAssistantScreen()),
                 );
               },
             ),

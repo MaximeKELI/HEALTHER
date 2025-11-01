@@ -1,5 +1,6 @@
 import 'dart:io';
 import '../models/diagnostic.dart';
+import 'gamification_provider.dart';
 import '../services/api_service.dart';
 import 'package:flutter/foundation.dart';
 import '../services/camera_service.dart';
@@ -114,6 +115,10 @@ class DiagnosticProvider with ChangeNotifier {
 
         // Recharger la liste des diagnostics
         await loadDiagnostics(userId: userId);
+
+        // Ajouter des points de gamification
+        // Note: La gamification sera gérée au niveau de l'UI avec Provider.of
+        // car DiagnosticProvider n'a pas accès au BuildContext
       } catch (e) {
         // Si erreur réseau, ajouter à la file d'attente offline
         print('Erreur réseau - Ajout à la file d\'attente offline: $e');

@@ -6,6 +6,7 @@ import '../providers/auth_provider.dart';
 import '../services/camera_service.dart';
 import '../providers/diagnostic_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import '../providers/gamification_provider.dart';
 
 class DiagnosticScreen extends StatefulWidget {
   const DiagnosticScreen({super.key});
@@ -133,6 +134,14 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
       if (!mounted) return;
 
       if (success) {
+        // Ajouter des points de gamification
+        try {
+          final gamification = Provider.of<GamificationProvider>(context, listen: false);
+          gamification.addDiagnosticPoints(points: 10);
+        } catch (e) {
+          print('Erreur gamification: $e');
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Diagnostic enregistré avec succès'),
