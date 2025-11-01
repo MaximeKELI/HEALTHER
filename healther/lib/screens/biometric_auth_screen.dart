@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
+import 'package:local_auth/local_auth.dart';
 import '../services/biometric_auth_service.dart';
 
 /// Écran pour l'authentification biométrique
@@ -47,8 +46,6 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen> {
 
       if (authenticated) {
         // Authentification réussie - naviguer vers l'écran d'accueil
-        final authProvider = Provider.of<AuthProvider>(context, listen: false);
-        // Optionnel : déclencher une connexion automatique si token valide
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -85,8 +82,6 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen> {
         return 'Authentification forte';
       case BiometricType.weak:
         return 'Authentification faible';
-      default:
-        return 'Biométrie';
     }
   }
 

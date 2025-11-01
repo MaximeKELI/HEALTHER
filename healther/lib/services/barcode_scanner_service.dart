@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class BarcodeScannerService {

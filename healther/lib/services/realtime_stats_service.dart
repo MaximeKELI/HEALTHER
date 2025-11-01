@@ -9,7 +9,7 @@ class RealtimeStatsService with ChangeNotifier {
   factory RealtimeStatsService() => _instance;
   RealtimeStatsService._internal();
 
-  String get baseUrl => ApiService.baseUrl.replaceAll('/api', '');
+  String get baseUrl => ApiService().baseUrl.replaceAll('/api', '');
   IO.Socket? _socket;
   Timer? _pollTimer;
   

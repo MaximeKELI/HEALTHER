@@ -7,7 +7,7 @@ class TOTPService {
   factory TOTPService() => _instance;
   TOTPService._internal();
 
-  String get baseUrl => ApiService.baseUrl;
+  String get baseUrl => ApiService().baseUrl;
 
   /// Générer un secret TOTP et QR code
   Future<Map<String, dynamic>> generateTOTPSecret() async {

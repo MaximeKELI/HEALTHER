@@ -7,7 +7,7 @@ class ChatService {
   factory ChatService() => _instance;
   ChatService._internal();
 
-  String get baseUrl => ApiService.baseUrl;
+  String get baseUrl => ApiService().baseUrl;
 
   /// Envoyer un message dans le chat d'un diagnostic
   Future<int> sendMessage({

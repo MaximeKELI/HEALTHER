@@ -10,15 +10,7 @@ class ApiService {
   // Pour Android Emulator : utiliser 'http://10.0.2.2:3000/api'
   // Pour iOS Simulator : utiliser 'http://localhost:3000/api'
   // Pour appareil physique : utiliser 'http://[ADRESSE_IP_LOCALE]:3000/api'
-  static String get baseUrl {
-    // Utiliser une variable d'environnement si définie, sinon valeur par défaut
-    const String envUrl = String.fromEnvironment('API_BASE_URL', defaultValue: '');
-    if (envUrl.isNotEmpty) {
-      return envUrl;
-    }
-    // Détection automatique pour Android Emulator
-    return 'http://localhost:3000/api';
-  }
+  String _baseUrl;
   
   // Token JWT stocké
   String? _token;
@@ -27,7 +19,18 @@ class ApiService {
   // Singleton pattern
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
-  ApiService._internal();
+  ApiService._internal() : _baseUrl = _getBaseUrl();
+
+  // Méthode statique pour obtenir l'URL de base
+  static String _getBaseUrl() {
+    // Utiliser une variable d'environnement si définie, sinon valeur par défaut
+    const String envUrl = String.fromEnvironment('API_BASE_URL', defaultValue: '');
+    if (envUrl.isNotEmpty) {
+      return envUrl;
+    }
+    // Détection automatique pour Android Emulator
+    return 'http://localhost:3000/api';
+  }
 
   // Définir le token JWT
   void setToken(String? token) {

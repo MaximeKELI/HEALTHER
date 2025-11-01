@@ -1,8 +1,7 @@
-import 'package:google_translate/google_translate.dart';
-
 /// Service pour la traduction multilingue
+/// Note: Package google_translate n'existe pas, utiliser API REST directement
 class TranslationService {
-  final GoogleTranslate _googleTranslate = GoogleTranslate();
+  // TODO: Intégrer Google Translate API REST avec clé API
 
   /// Traduire un texte
   Future<String> translate({

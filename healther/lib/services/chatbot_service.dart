@@ -58,7 +58,7 @@ class ChatbotConversation {
 class ChatbotService {
   final ApiService _apiService = ApiService();
 
-  String get _baseUrl => ApiService.baseUrl;
+  String get _baseUrl => ApiService().baseUrl;
 
   // Récupérer ou créer une conversation
   Future<Map<String, dynamic>> getOrCreateConversation() async {

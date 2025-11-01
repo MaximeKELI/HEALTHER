@@ -7,7 +7,7 @@ class GeofencingService {
   factory GeofencingService() => _instance;
   GeofencingService._internal();
 
-  String get baseUrl => ApiService.baseUrl.replaceAll('/api', '');
+  String get baseUrl => ApiService().baseUrl.replaceAll('/api', '');
 
   // Obtenir toutes les zones géofencing actives
   Future<List<Map<String, dynamic>>> getActiveGeofences() async {

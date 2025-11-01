@@ -1,6 +1,5 @@
 import 'dart:io';
 import '../models/diagnostic.dart';
-import 'gamification_provider.dart';
 import '../services/api_service.dart';
 import 'package:flutter/foundation.dart';
 import '../services/camera_service.dart';

@@ -8,7 +8,7 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
-  String get baseUrl => ApiService.baseUrl.replaceAll('/api', '');
+  String get baseUrl => ApiService().baseUrl.replaceAll('/api', '');
   IO.Socket? _socket;
   
   void connectSocket(int userId) {

@@ -184,9 +184,6 @@ class VoiceAssistantService with ChangeNotifier {
         'audio',
         audioBytes,
         filename: 'audio.wav',
-        contentType: mimeType.contains('pcm')
-            ? const {'Content-Type': 'audio/pcm'}
-            : const {'Content-Type': 'audio/wav'},
       ));
 
       final streamedResponse = await request.send();

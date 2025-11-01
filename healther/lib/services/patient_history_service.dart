@@ -7,7 +7,7 @@ class PatientHistoryService {
   factory PatientHistoryService() => _instance;
   PatientHistoryService._internal();
 
-  String get baseUrl => ApiService.baseUrl;
+  String get baseUrl => ApiService().baseUrl;
 
   /// Obtenir l'historique d'un patient
   Future<List<Map<String, dynamic>>> getPatientHistory(String identifier) async {

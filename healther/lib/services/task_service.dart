@@ -7,7 +7,7 @@ class TaskService {
   factory TaskService() => _instance;
   TaskService._internal();
 
-  String get baseUrl => ApiService.baseUrl;
+  String get baseUrl => ApiService().baseUrl;
 
   /// Créer une tâche
   Future<int> createTask({

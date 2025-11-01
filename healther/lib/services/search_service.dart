@@ -7,7 +7,7 @@ class SearchService {
   factory SearchService() => _instance;
   SearchService._internal();
 
-  String get baseUrl => ApiService.baseUrl;
+  String get baseUrl => ApiService().baseUrl;
 
   /// Recherche avancée de diagnostics
   Future<Map<String, dynamic>> searchDiagnostics({

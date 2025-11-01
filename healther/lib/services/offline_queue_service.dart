@@ -10,7 +10,7 @@ class OfflineQueueService {
   OfflineQueueService._internal();
 
   Database? _db;
-  String get baseUrl => ApiService.baseUrl.replaceAll('/api', '');
+  String get baseUrl => ApiService().baseUrl.replaceAll('/api', '');
 
   Future<Database> get database async {
     if (_db != null) return _db!;
