@@ -1,0 +1,62 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "M.A.D.E API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:3000" }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": { "description": "OK" }
+        }
+      }
+    },
+    "/api/diagnostics": {
+      "post": {
+        "summary": "Créer un diagnostic (JSON base64)",
+        "requestBody": { "required": true },
+        "responses": { "201": { "description": "Créé" } }
+      },
+      "get": {
+        "summary": "Lister diagnostics",
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/api/diagnostics/upload": {
+      "post": {
+        "summary": "Créer un diagnostic (upload fichier)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image_file": { "type": "string", "format": "binary" },
+                  "user_id": { "type": "integer" },
+                  "maladie_type": { "type": "string", "enum": ["paludisme", "typhoide", "mixte"] },
+                  "statut": { "type": "string", "enum": ["positif", "negatif", "incertain"] }
+                },
+                "required": ["image_file", "user_id", "maladie_type", "statut"]
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Créé" } }
+      }
+    },
+    "/api/ml/analyze": {
+      "post": {
+        "summary": "Analyser image (IA)",
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  }
+}
+
+
