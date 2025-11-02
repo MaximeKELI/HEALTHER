@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/camera_service.dart';
 import '../utils/responsive_helper.dart';
+import '../widgets/image_preview_dialog.dart';
 import '../providers/diagnostic_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../providers/gamification_provider.dart';
+import '../services/haptic_feedback_service.dart';
 
 class DiagnosticScreen extends StatefulWidget {
   const DiagnosticScreen({super.key});
@@ -18,7 +20,9 @@ class DiagnosticScreen extends StatefulWidget {
 
 class _DiagnosticScreenState extends State<DiagnosticScreen> {
   final CameraService _cameraService = CameraService();
+  final HapticFeedbackService _haptic = HapticFeedbackService();
   XFile? _selectedImage;
+  File? _imageFile;
   String? _imageBase64;
   Map<String, dynamic>? _analysisResult;
   MaladieType _selectedMaladie = MaladieType.paludisme;
@@ -27,16 +31,32 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
 
   Future<void> _takePicture() async {
     try {
+      _haptic.selectionClick();
       final image = await _cameraService.takePicture();
       if (image != null) {
-        setState(() {
-          _selectedImage = image;
-          _imageBase64 = null;
-          _analysisResult = null;
-        });
-        await _convertImageToBase64();
+        final imageFile = File(image.path);
+        // Afficher preview avant utilisation
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => ImagePreviewDialog(
+            imageFile: imageFile,
+            onSave: (editedFile) {
+              setState(() {
+                _imageFile = editedFile;
+                _selectedImage = image;
+                _imageBase64 = null;
+                _analysisResult = null;
+              });
+              _convertImageToBase64();
+            },
+          ),
+        );
+        if (confirmed == true && _imageFile != null) {
+          await _convertImageToBase64();
+        }
       }
     } catch (e) {
+      _haptic.error();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -49,16 +69,32 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
 
   Future<void> _pickImageFromGallery() async {
     try {
+      _haptic.selectionClick();
       final image = await _cameraService.pickImageFromGallery();
       if (image != null) {
-        setState(() {
-          _selectedImage = image;
-          _imageBase64 = null;
-          _analysisResult = null;
-        });
-        await _convertImageToBase64();
+        final imageFile = File(image.path);
+        // Afficher preview avant utilisation
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => ImagePreviewDialog(
+            imageFile: imageFile,
+            onSave: (editedFile) {
+              setState(() {
+                _imageFile = editedFile;
+                _selectedImage = image;
+                _imageBase64 = null;
+                _analysisResult = null;
+              });
+              _convertImageToBase64();
+            },
+          ),
+        );
+        if (confirmed == true && _imageFile != null) {
+          await _convertImageToBase64();
+        }
       }
     } catch (e) {
+      _haptic.error();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

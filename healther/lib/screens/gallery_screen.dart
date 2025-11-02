@@ -5,6 +5,10 @@ import 'package:intl/intl.dart';
 import '../models/diagnostic.dart';
 import '../services/api_service.dart';
 import 'package:flutter/material.dart';
+import '../widgets/skeleton_loader.dart';
+import '../widgets/view_toggle_widget.dart';
+import '../widgets/empty_state_widget.dart';
+import '../services/haptic_feedback_service.dart';
 
 /// Écran Galerie de Photos avec Tags
 class GalleryScreen extends StatefulWidget {
@@ -16,6 +20,7 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   final ApiService _apiService = ApiService();
+  final HapticFeedbackService _haptic = HapticFeedbackService();
   
   List<Diagnostic> _diagnostics = [];
   bool _isLoading = false;
@@ -104,9 +109,21 @@ class _GalleryScreenState extends State<GalleryScreen> {
           ),
         ],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
+      body: _isLoading && _diagnostics.isEmpty
+          ? const DiagnosticListSkeleton(itemCount: 6)
+          : _filteredDiagnostics.isEmpty
+              ? EmptyStateWidget(
+                  icon: Icons.photo_library_outlined,
+                  title: 'Aucune photo',
+                  message: _selectedTag != null
+                      ? 'Aucune photo trouvée avec le filtre sélectionné.\nEssayez avec un autre filtre.'
+                      : 'Aucune photo dans votre galerie.\nCréez votre premier diagnostic pour commencer !',
+                  actionLabel: _selectedTag != null ? null : 'Nouveau Diagnostic',
+                  onAction: _selectedTag != null ? null : () {
+                    // Navigation sera gérée par le parent
+                  },
+                )
+              : Column(
               children: [
                 // Filtres par tags
                 Container(
@@ -123,9 +140,15 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 const Divider(),
                 // Grille ou liste de photos
                 Expanded(
-                  child: _viewMode == 'grid'
-                      ? _buildGridView()
-                      : _buildListView(),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      _haptic.lightImpact();
+                      await _loadDiagnostics();
+                    },
+                    child: _viewMode == 'grid'
+                        ? _buildGridView()
+                        : _buildListView(),
+                  ),
                 ),
               ],
             ),
@@ -152,10 +175,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
   Widget _buildGridView() {
     final filtered = _filteredDiagnostics;
 
-    if (filtered.isEmpty) {
-      return const Center(child: Text('Aucune photo disponible'));
-    }
-
     return GridView.builder(
       padding: const EdgeInsets.all(8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -173,10 +192,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   Widget _buildListView() {
     final filtered = _filteredDiagnostics;
-
-    if (filtered.isEmpty) {
-      return const Center(child: Text('Aucune photo disponible'));
-    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(8),

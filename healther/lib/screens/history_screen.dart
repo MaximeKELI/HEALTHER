@@ -4,7 +4,11 @@ import '../models/diagnostic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/skeleton_loader.dart';
+import '../widgets/empty_state_widget.dart';
+import '../widgets/swipeable_list_tile.dart';
 import '../providers/diagnostic_provider.dart';
+import '../services/haptic_feedback_service.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -14,6 +18,8 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  final HapticFeedbackService _haptic = HapticFeedbackService();
+
   @override
   void initState() {
     super.initState();
@@ -59,14 +65,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final diagnosticProvider = Provider.of<DiagnosticProvider>(context);
 
     return Scaffold(
-      body: diagnosticProvider.isLoading
-          ? const Center(child: CircularProgressIndicator())
+      body: diagnosticProvider.isLoading && diagnosticProvider.diagnostics.isEmpty
+          ? const DiagnosticListSkeleton(itemCount: 5)
           : diagnosticProvider.diagnostics.isEmpty
-              ? const Center(
-                  child: Text('Aucun diagnostic enregistré'),
+              ? EmptyStateWidget(
+                  icon: Icons.history,
+                  title: 'Aucun diagnostic',
+                  message: 'Vous n\'avez pas encore créé de diagnostic.\nCommencez par créer votre premier diagnostic !',
+                  actionLabel: 'Nouveau Diagnostic',
+                  onAction: () {
+                    // Navigation vers diagnostic screen
+                  },
                 )
               : RefreshIndicator(
                   onRefresh: () async {
+                    _haptic.lightImpact();
                     _loadDiagnostics();
                     await Future.delayed(const Duration(seconds: 1));
                   },
@@ -77,61 +90,71 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       final diagnostic = diagnosticProvider.diagnostics[index];
                       final dateFormat = DateFormat('dd/MM/yyyy à HH:mm');
 
-                      return Card(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor:
-                                _getStatusColor(diagnostic.statut).withOpacity(0.2),
-                            child: Icon(
-                              _getStatusIcon(diagnostic.statut),
-                              color: _getStatusColor(diagnostic.statut),
-                            ),
+                      return SwipeableListTile(
+                        onSwipeDelete: () {
+                          _haptic.mediumImpact();
+                          // TODO: Implémenter suppression
+                        },
+                        onSwipeShare: () {
+                          _haptic.selectionClick();
+                          // TODO: Implémenter partage
+                        },
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
                           ),
-                          title: Text(diagnostic.maladieTypeLabel),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Statut: ${diagnostic.statutLabel}',
-                                style: TextStyle(
-                                  color: _getStatusColor(diagnostic.statut),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor:
+                                  _getStatusColor(diagnostic.statut).withOpacity(0.2),
+                              child: Icon(
+                                _getStatusIcon(diagnostic.statut),
+                                color: _getStatusColor(diagnostic.statut),
                               ),
-                              if (diagnostic.region != null)
-                                Text('Région: ${diagnostic.region}'),
-                              if (diagnostic.createdAt != null)
+                            ),
+                            title: Text(diagnostic.maladieTypeLabel),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                  dateFormat.format(diagnostic.createdAt!),
-                                  style: const TextStyle(fontSize: 12),
+                                  'Statut: ${diagnostic.statutLabel}',
+                                  style: TextStyle(
+                                    color: _getStatusColor(diagnostic.statut),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                            ],
-                          ),
-                          trailing: diagnostic.confiance != null
-                              ? Chip(
-                                  label: Text(
-                                    '${diagnostic.confiance!.toStringAsFixed(0)}%',
+                                if (diagnostic.region != null)
+                                  Text('Région: ${diagnostic.region}'),
+                                if (diagnostic.createdAt != null)
+                                  Text(
+                                    dateFormat.format(diagnostic.createdAt!),
                                     style: const TextStyle(fontSize: 12),
                                   ),
-                                  backgroundColor:
-                                      _getStatusColor(diagnostic.statut).withOpacity(0.1),
-                                )
-                              : null,
-                          onTap: () {
-                            // Naviguer vers le feedback ML
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MLFeedbackScreen(
-                                  diagnostic: diagnostic,
+                              ],
+                            ),
+                            trailing: diagnostic.confiance != null
+                                ? Chip(
+                                    label: Text(
+                                      '${diagnostic.confiance!.toStringAsFixed(0)}%',
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    backgroundColor:
+                                        _getStatusColor(diagnostic.statut).withOpacity(0.1),
+                                  )
+                                : null,
+                            onTap: () {
+                              _haptic.selectionClick();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MLFeedbackScreen(
+                                    diagnostic: diagnostic,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       );
                     },

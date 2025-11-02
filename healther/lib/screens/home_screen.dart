@@ -9,17 +9,24 @@ import 'dashboard_screen.dart';
 import 'analytics_screen.dart';
 import 'diagnostic_screen.dart';
 import 'prediction_screen.dart';
+import 'onboarding_screen.dart';
 import 'map_heatmap_screen.dart';
 import 'gamification_screen.dart';
 import 'notifications_screen.dart';
+import 'global_search_screen.dart';
 import 'barcode_scanner_screen.dart';
 import 'voice_assistant_screen.dart';
 import 'ocr_prescription_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'realtime_dashboard_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/responsive_helper.dart';
+import '../widgets/quick_actions_fab.dart';
+import '../widgets/global_search_bar.dart';
+import '../services/haptic_feedback_service.dart';
+import '../services/keyboard_shortcuts_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,6 +37,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  final KeyboardShortcutsService _shortcutsService = KeyboardShortcutsService();
+  final HapticFeedbackService _haptic = HapticFeedbackService();
+  final FocusNode _searchFocusNode = FocusNode();
 
   final List<Widget> _screens = [
     const DiagnosticScreen(),
@@ -38,42 +48,164 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _setupKeyboardShortcuts();
+    _setupGlobalSearch();
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _setupKeyboardShortcuts() {
+    _shortcutsService.registerShortcut(
+      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyK),
+      callback: () => _openGlobalSearch(),
+      description: 'Ouvrir la recherche globale',
+    );
+    _shortcutsService.registerShortcut(
+      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN),
+      callback: () => _newDiagnostic(),
+      description: 'Nouveau diagnostic',
+    );
+    _shortcutsService.registerShortcut(
+      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.slash),
+      callback: () => _showHelp(),
+      description: 'Aide',
+    );
+    _shortcutsService.registerShortcut(
+      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.comma),
+      callback: () => _openSettings(),
+      description: 'Paramètres',
+    );
+  }
+
+  void _setupGlobalSearch() {
+    // Setup global search avec Ctrl+K
+  }
+
+  void _openGlobalSearch() {
+    _haptic.selectionClick();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const GlobalSearchScreen()),
+    );
+  }
+
+  void _newDiagnostic() {
+    _haptic.selectionClick();
+    setState(() => _currentIndex = 0);
+  }
+
+  void _showHelp() {
+    _haptic.selectionClick();
+    _showShortcutsHelp();
+  }
+
+  void _openSettings() {
+    _haptic.selectionClick();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+    );
+  }
+
+  void _showShortcutsHelp() {
+    final shortcuts = _shortcutsService.getHelpShortcuts();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Raccourcis Clavier'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: shortcuts.entries.map((entry) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      entry.key,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(child: Text(entry.value)),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fermer'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final user = authProvider.currentUser;
     final isMobile = ResponsiveHelper.isMobile(context);
     final isDesktop = ResponsiveHelper.isDesktop(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('HEALTHER'),
-            if (user != null)
-              Text(
-                user.fullName.isNotEmpty && user.fullName != user.username
-                    ? user.fullName
-                    : user.username,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
-              ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const NotificationsScreen()),
-              );
-            },
-            tooltip: 'Notifications',
+    return KeyboardShortcutsService().buildShortcuts(
+      context: context,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('HEALTHER'),
+              if (user != null)
+                Text(
+                  user.fullName.isNotEmpty && user.fullName != user.username
+                      ? user.fullName
+                      : user.username,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                ),
+            ],
           ),
+          actions: [
+            // Recherche globale
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: _openGlobalSearch,
+              tooltip: 'Recherche (Ctrl+K)',
+            ),
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: () {
+                _haptic.selectionClick();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NotificationsScreen()),
+                );
+              },
+              tooltip: 'Notifications',
+            ),
+            // Aide
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              onPressed: _showHelp,
+              tooltip: 'Aide (Ctrl+/)',
+            ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -139,6 +271,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: 'Dashboard',
                 ),
               ],
+            )
+          : null,
+      floatingActionButton: !isDesktop
+          ? QuickActionsFAB(
+              onNewDiagnostic: () {
+                setState(() => _currentIndex = 0);
+              },
+              onScanPrescription: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OCRPrescriptionScreen()),
+                );
+              },
+              onScanBarcode: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BarcodeScannerScreen(
+                      onBarcodeScanned: (barcode, format) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Code-barres scanné: $barcode')),
+                        );
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                );
+              },
+              onVoiceCommand: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const VoiceAssistantScreen()),
+                );
+              },
             )
           : null,
       drawer: isDesktop ? null : Drawer(

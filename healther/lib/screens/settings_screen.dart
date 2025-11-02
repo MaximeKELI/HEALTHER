@@ -19,6 +19,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   double _fontSize = 1.0;
   bool _highContrast = false;
   bool _hapticEnabled = false;
+  String _displayDensity = 'normal'; // 'compact', 'normal', 'spacious'
 
   @override
   void initState() {
@@ -134,6 +135,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     await _accessibilityService.setHapticEnabled(value);
                     setState(() => _hapticEnabled = value);
                   },
+                ),
+                // Densité d'affichage
+                ListTile(
+                  title: const Text('Densité d\'affichage'),
+                  subtitle: DropdownButton<String>(
+                    value: _displayDensity,
+                    isExpanded: true,
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'compact',
+                        child: Text('Compact'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'normal',
+                        child: Text('Normal'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'spacious',
+                        child: Text('Spacieux'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => _displayDensity = value);
+                        // TODO: Sauvegarder dans SharedPreferences et appliquer
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

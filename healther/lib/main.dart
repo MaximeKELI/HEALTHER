@@ -4,8 +4,12 @@ import 'screens/login_screen.dart';
 import 'providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'providers/theme_provider.dart';
+import 'package:flutter/services.dart';
+import 'screens/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+import 'services/onboarding_service.dart';
+import 'screens/global_search_screen.dart';
 import 'providers/diagnostic_provider.dart';
 import 'services/localization_service.dart';
 import 'providers/ml_feedback_provider.dart';
@@ -13,6 +17,7 @@ import 'services/accessibility_service.dart';
 import 'providers/notification_provider.dart';
 import 'providers/gamification_provider.dart';
 import 'services/realtime_stats_service.dart';
+import 'services/keyboard_shortcuts_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> _initializeServices() async {
@@ -128,6 +133,8 @@ class MyApp extends StatelessWidget {
               '/': (context) => const AuthWrapper(),
               '/login': (context) => const LoginScreen(),
               '/home': (context) => const HomeScreen(),
+              '/onboarding': (context) => const OnboardingScreen(),
+              '/search': (context) => const GlobalSearchScreen(),
             },
           );
         },
@@ -136,14 +143,58 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  final OnboardingService _onboardingService = OnboardingService();
+  bool _checkingOnboarding = true;
+  bool _needsOnboarding = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboarding();
+  }
+
+  Future<void> _checkOnboarding() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    
+    if (authProvider.isAuthenticated) {
+      final completed = await _onboardingService.isOnboardingCompleted();
+      if (mounted) {
+        setState(() {
+          _checkingOnboarding = false;
+          _needsOnboarding = !completed;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _checkingOnboarding = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
 
+    if (_checkingOnboarding) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     if (authProvider.isAuthenticated) {
+      if (_needsOnboarding) {
+        return const OnboardingScreen();
+      }
       return const HomeScreen();
     } else {
       return const LoginScreen();
