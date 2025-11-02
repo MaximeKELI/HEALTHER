@@ -46,7 +46,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HEALTHER'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('HEALTHER'),
+            if (user != null)
+              Text(
+                user.fullName.isNotEmpty && user.fullName != user.username
+                    ? user.fullName
+                    : user.username,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.white70,
+                      fontSize: 12,
+                    ),
+              ),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
@@ -152,19 +168,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    user?.fullName ?? 'Utilisateur',
+                    user != null
+                        ? (user.fullName.isNotEmpty && user.fullName != user.username
+                            ? user.fullName
+                            : user.username)
+                        : 'Utilisateur',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (user?.centreSante != null)
+                  if (user != null)
                     Text(
-                      user!.centreSante!,
+                      '@${user.username}',
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
+                      ),
+                    ),
+                  if (user?.centreSante != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        user!.centreSante!,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                 ],

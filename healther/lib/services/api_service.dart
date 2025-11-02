@@ -243,6 +243,44 @@ class ApiService {
     return User.fromJson(data);
   }
 
+  /// Mettre à jour le profil utilisateur
+  Future<User> updateUser({
+    required int userId,
+    String? nom,
+    String? prenom,
+    String? email,
+    String? centreSante,
+  }) async {
+    final body = <String, dynamic>{};
+    if (nom != null) body['nom'] = nom;
+    if (prenom != null) body['prenom'] = prenom;
+    if (email != null) body['email'] = email;
+    if (centreSante != null) body['centre_sante'] = centreSante;
+
+    final response = await _executeWithRetry(() async {
+      return await http.put(
+        Uri.parse('$baseUrl/users/$userId'),
+        headers: _headers,
+        body: json.encode(body),
+      );
+    });
+
+    await _handleError(response);
+    
+    final data = json.decode(response.body);
+    if (data == null || data is! Map<String, dynamic>) {
+      throw Exception('Données utilisateur invalides');
+    }
+    
+    // Le backend retourne { message, user }
+    final userData = data['user'] ?? data;
+    if (userData == null || userData is! Map<String, dynamic>) {
+      throw Exception('Données utilisateur invalides');
+    }
+    
+    return User.fromJson(userData);
+  }
+
   // Upload photo de profil
   Future<Map<String, dynamic>> uploadProfilePicture(int userId, File imageFile) async {
     final uri = Uri.parse('$baseUrl/users/$userId/profile-picture');

@@ -226,6 +226,83 @@ router.get('/:id', authenticateToken, checkPermission('users', 'read'), async (r
   }
 });
 
+// Mettre à jour le profil utilisateur (protégé)
+router.put('/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = parseInt(id);
+    const { nom, prenom, email, centre_sante } = req.body;
+    
+    // Vérifier que l'utilisateur modifie son propre profil ou est admin
+    if (userId !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Vous ne pouvez modifier que votre propre profil' });
+    }
+
+    // Vérifier si l'utilisateur existe
+    const existingUser = await dbGet('SELECT id, email FROM users WHERE id = ?', [userId]);
+    if (!existingUser) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+
+    // Si l'email change, vérifier qu'il n'est pas déjà utilisé
+    if (email && email !== existingUser.email) {
+      const emailExists = await dbGet('SELECT id FROM users WHERE email = ? AND id != ?', [email, userId]);
+      if (emailExists) {
+        return res.status(409).json({ error: 'Cet email est déjà utilisé par un autre utilisateur' });
+      }
+    }
+
+    // Construire la requête de mise à jour dynamiquement
+    const updates = [];
+    const values = [];
+    
+    if (nom !== undefined) {
+      updates.push('nom = ?');
+      values.push(nom || null);
+    }
+    if (prenom !== undefined) {
+      updates.push('prenom = ?');
+      values.push(prenom || null);
+    }
+    if (email !== undefined) {
+      updates.push('email = ?');
+      values.push(email);
+    }
+    if (centre_sante !== undefined) {
+      updates.push('centre_sante = ?');
+      values.push(centre_sante || null);
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: 'Aucune donnée à mettre à jour' });
+    }
+
+    values.push(userId);
+    const query = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
+    await dbRun(query, values);
+
+    // Récupérer l'utilisateur mis à jour
+    const updatedUser = await dbGet('SELECT id, username, email, nom, prenom, centre_sante, role, profile_picture, created_at FROM users WHERE id = ?', [userId]);
+
+    // Générer URL signée si profile_picture existe
+    if (updatedUser.profile_picture) {
+      try {
+        updatedUser.profile_picture_url = await storageService.getSignedUrl(updatedUser.profile_picture, 3600);
+      } catch (e) {
+        console.error('Erreur génération URL signée:', e);
+      }
+    }
+
+    res.json({
+      message: 'Profil mis à jour avec succès',
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du profil:', error);
+    res.status(500).json({ error: 'Erreur serveur lors de la mise à jour du profil' });
+  }
+});
+
 // Upload/Mise à jour photo de profil
 router.put('/:id/profile-picture', authenticateToken, upload.single('profile_picture'), async (req, res) => {
   try {
