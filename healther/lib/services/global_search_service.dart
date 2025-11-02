@@ -1,5 +1,3 @@
-import '../models/user.dart';
-import '../models/diagnostic.dart';
 import '../services/api_service.dart';
 
 /// Service de recherche globale
@@ -25,17 +23,24 @@ class GlobalSearchService {
     }
 
     try {
-      // Recherche diagnostics
-      final diagnostics = await _apiService.getDiagnostics(
-        search: query,
-        limit: 20,
-      );
+      // Recherche diagnostics - récupérer tous et filtrer côté client
+      // Note: Pour une vraie recherche, il faudrait ajouter un paramètre 'search' au backend
+      final allDiagnostics = await _apiService.getDiagnostics(limit: 100);
+      
+      // Filtrer les diagnostics qui correspondent à la requête
+      final diagnostics = allDiagnostics.where((diagnostic) {
+        final queryLower = query.toLowerCase();
+        return diagnostic.maladieTypeLabel.toLowerCase().contains(queryLower) ||
+               diagnostic.statutLabel.toLowerCase().contains(queryLower) ||
+               (diagnostic.region != null && diagnostic.region!.toLowerCase().contains(queryLower));
+      }).take(20).toList();
 
-      // Recherche patients (via diagnostics)
+      // Recherche patients (via diagnostics) - extraire régions uniques comme exemple
       final patients = <String>{};
       for (var diagnostic in diagnostics) {
-        // Extraire informations patient si disponibles
-        // Cette logique dépend de votre modèle de données
+        if (diagnostic.region != null && diagnostic.region!.toLowerCase().contains(query.toLowerCase())) {
+          patients.add(diagnostic.region!);
+        }
       }
 
       // Sauvegarder dans l'historique

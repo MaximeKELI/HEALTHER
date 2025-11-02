@@ -137,7 +137,7 @@ class _QuickActionsFABState extends State<QuickActionsFAB>
       child: FadeTransition(
         opacity: _expandAnimation,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 80.0 + (offset * 60.0)),
+          padding: EdgeInsets.only(bottom: 80.0 + (offset * 60.0)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

@@ -9,7 +9,6 @@ import 'dashboard_screen.dart';
 import 'analytics_screen.dart';
 import 'diagnostic_screen.dart';
 import 'prediction_screen.dart';
-import 'onboarding_screen.dart';
 import 'map_heatmap_screen.dart';
 import 'gamification_screen.dart';
 import 'notifications_screen.dart';
@@ -24,7 +23,6 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/responsive_helper.dart';
 import '../widgets/quick_actions_fab.dart';
-import '../widgets/global_search_bar.dart';
 import '../services/haptic_feedback_service.dart';
 import '../services/keyboard_shortcuts_service.dart';
 
@@ -62,22 +60,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _setupKeyboardShortcuts() {
     _shortcutsService.registerShortcut(
-      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyK),
+      keys: LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyK),
       callback: () => _openGlobalSearch(),
       description: 'Ouvrir la recherche globale',
     );
     _shortcutsService.registerShortcut(
-      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN),
+      keys: LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN),
       callback: () => _newDiagnostic(),
       description: 'Nouveau diagnostic',
     );
     _shortcutsService.registerShortcut(
-      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.slash),
+      keys: LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.slash),
       callback: () => _showHelp(),
       description: 'Aide',
     );
     _shortcutsService.registerShortcut(
-      keys: const LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.comma),
+      keys: LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.comma),
       callback: () => _openSettings(),
       description: 'Paramètres',
     );
@@ -544,6 +542,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
