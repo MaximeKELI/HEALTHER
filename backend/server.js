@@ -74,11 +74,17 @@ const alertsRoutes = require('./routes/alerts');
 const contactTracingRoutes = require('./routes/contact_tracing');
 const multiChannelNotificationRoutes = require('./routes/multi_channel_notifications');
 const medicationRoutes = require('./routes/medications');
+const videoConsultationRoutes = require('./routes/video_consultation');
 
 // Importer monitoringService APRÈS les autres routes
 const monitoringService = require('./services/monitoring_service');
+const { setupCacheCleanup } = require('./middleware/performance');
+
 // Middleware de monitoring (doit être après l'import)
 app.use(monitoringService.monitoringMiddleware);
+
+// Setup cache cleanup automatique
+setupCacheCleanup();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
@@ -110,6 +116,7 @@ app.use('/api/alerts', alertsRoutes);
 app.use('/api/contact-tracing', contactTracingRoutes);
 app.use('/api/notifications-multichannel', multiChannelNotificationRoutes);
 app.use('/api/medications', medicationRoutes);
+app.use('/api/video-consultation', videoConsultationRoutes);
 app.use('/metrics', monitoringRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

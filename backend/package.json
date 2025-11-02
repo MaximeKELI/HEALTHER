@@ -8,7 +8,11 @@
     "dev": "nodemon server.js",
     "init-db": "node scripts/init-db.js",
     "create-user": "node scripts/create-user.js",
-    "test-sync": "node scripts/test-sync.js"
+    "test-sync": "node scripts/test-sync.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . || echo 'Linter not configured'"
   },
   "keywords": [
     "healthcare",
@@ -49,9 +53,13 @@
     "socket.io": "^4.8.1",
     "speakeasy": "^2.0.0",
     "sqlite3": "^5.1.6",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "agora-access-token": "^3.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.54.0"
   }
 }

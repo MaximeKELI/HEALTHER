@@ -31,11 +31,14 @@ class _DashboardPatientScreenState extends State<DashboardPatientScreen> {
       // Charger les diagnostics du patient
       final diagnostics = await _apiService.getDiagnostics();
       
+      // Convertir les objets Diagnostic en Map
+      final diagnosticsMap = diagnostics.map((d) => d.toJson()).toList();
+      
       // Calculer les statistiques personnelles
       final stats = _calculateStats(diagnostics);
       
       setState(() {
-        _recentDiagnostics = diagnostics.take(5).toList();
+        _recentDiagnostics = diagnosticsMap.take(5).toList();
         _patientStats = stats;
         _isLoading = false;
       });
@@ -53,12 +56,24 @@ class _DashboardPatientScreenState extends State<DashboardPatientScreen> {
     }
   }
 
-  Map<String, dynamic> _calculateStats(List<Map<String, dynamic>> diagnostics) {
+  Map<String, dynamic> _calculateStats(List<dynamic> diagnostics) {
     final total = diagnostics.length;
-    final positif = diagnostics.where((d) => d['statut'] == 'positif').length;
-    final negatif = diagnostics.where((d) => d['statut'] == 'negatif').length;
-    final paludisme = diagnostics.where((d) => d['maladie_type'] == 'paludisme').length;
-    final typhoide = diagnostics.where((d) => d['maladie_type'] == 'typhoide').length;
+    final positif = diagnostics.where((d) {
+      if (d is Map) return d['statut'] == 'positif';
+      return d.statut.name == 'positif';
+    }).length;
+    final negatif = diagnostics.where((d) {
+      if (d is Map) return d['statut'] == 'negatif';
+      return d.statut.name == 'negatif';
+    }).length;
+    final paludisme = diagnostics.where((d) {
+      if (d is Map) return d['maladie_type'] == 'paludisme';
+      return d.maladieType.name == 'paludisme';
+    }).length;
+    final typhoide = diagnostics.where((d) {
+      if (d is Map) return d['maladie_type'] == 'typhoide';
+      return d.maladieType.name == 'typhoide';
+    }).length;
 
     return {
       'total_diagnostics': total,

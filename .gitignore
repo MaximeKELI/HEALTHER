@@ -1,0 +1,77 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+healther/.dart_tool/
+healther/.flutter-plugins
+healther/.flutter-plugins-dependencies
+healther/pubspec.lock
+
+# Environment variables
+.env
+backend/.env
+*.env.local
+
+# Database
+backend/data/*.db
+backend/data/*.db-journal
+*.sqlite
+*.sqlite3
+
+# Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Reports
+backend/reports/*
+!backend/reports/.gitkeep
+
+# Build files
+backend/build/
+healther/build/
+healther/android/.gradle/
+healther/android/app/build/
+healther/ios/Pods/
+healther/ios/.symlinks/
+healther/ios/Flutter/Flutter.framework
+healther/ios/Flutter/Flutter.podspec
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Test
+*.test.js.snap
+backend/tests/coverage/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# SSL certificates (NEVER commit)
+ssl/
+*.pem
+*.key
+*.crt
+

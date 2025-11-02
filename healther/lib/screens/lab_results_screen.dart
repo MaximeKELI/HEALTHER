@@ -46,8 +46,10 @@ class _LabResultsScreenState extends State<LabResultsScreen> {
       
       if (widget.diagnosticId != null) {
         final diagnostic = await _apiService.getDiagnostic(widget.diagnosticId!);
+        // Convertir l'objet Diagnostic en Map
+        final diagnosticMap = diagnostic.toJson();
         setState(() {
-          _labResults = _parseLabData(diagnostic);
+          _labResults = _parseLabData(diagnosticMap);
         });
       }
 
@@ -108,8 +110,8 @@ class _LabResultsScreenState extends State<LabResultsScreen> {
       // Charger l'historique des résultats pour graphiques temporels
       final diagnostics = await _apiService.getDiagnostics();
       final historical = diagnostics
-          .where((d) => d['created_at'] != null)
-          .map((d) => _parseLabData(d))
+          .where((d) => d.createdAt != null)
+          .map((d) => _parseLabData(d.toJson()))
           .toList();
       
       setState(() {
