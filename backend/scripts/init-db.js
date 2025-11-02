@@ -356,6 +356,8 @@ db.serialize(() => {
   db.run(`CREATE INDEX IF NOT EXISTS idx_geofences_active ON geofences(active)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_chatbot_conversations_user ON chatbot_conversations(user_id, closed_at)`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_chatbot_messages_conversation ON chatbot_messages(conversation_id, created_at)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_medication_reminders_user ON medication_reminders(user_id, status)`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_medication_adherence_reminder ON medication_adherence(reminder_id, taken_at)`);
 
   // Données initiales - Permissions par rôle
   db.run(`INSERT OR IGNORE INTO permissions (role, resource, action) VALUES
@@ -366,6 +368,13 @@ db.serialize(() => {
     ('epidemiologist', 'diagnostics', 'read_all'),
     ('epidemiologist', 'dashboard', 'read'),
     ('epidemiologist', 'reports', 'create'),
+    ('agent', 'medications', 'create'),
+    ('agent', 'medications', 'read'),
+    ('agent', 'medications', 'update'),
+    ('supervisor', 'medications', 'read_all'),
+    ('agent', 'notifications', 'create'),
+    ('supervisor', 'notifications', 'create'),
+    ('epidemiologist', 'notifications', 'create'),
     ('admin', '*', '*')`);
 
   // Données initiales - Centres de santé (exemples)
