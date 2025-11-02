@@ -143,41 +143,28 @@ class HealtherLogoPainter extends CustomPainter {
     final x = (size.width - textPainter.width) / 2;
     final y = (size.height - textPainter.height) / 2;
     
-    // Dessiner plusieurs couches pour l'effet Italianno
-    final layers = [
-      color.withOpacity(0.3),
-      color.withOpacity(0.6),
-      color,
-    ];
-    
-    for (var i = 0; i < layers.length; i++) {
-      final layerTextSpan = TextSpan(
-        text: 'HEALTHER',
-        style: textStyle.copyWith(
-          color: layers[i],
-          fontSize: (textStyle.fontSize ?? size.height * 0.35) + (i * 2),
-        ),
-      );
-      
-      final layerPainter = TextPainter(
-        text: layerTextSpan,
-        textDirection: TextDirection.ltr,
-      );
-      
-      layerPainter.layout();
-      
-      canvas.save();
-      canvas.translate(
-        x + (i * 1.5),
-        y + (i * 1.5),
-      );
-      layerPainter.paint(canvas, Offset.zero);
-      canvas.restore();
-    }
-    
-    // Dessiner le texte principal
+    // Dessiner seulement le texte principal avec ombre subtile pour la lisibilité
     canvas.save();
     canvas.translate(x, y);
+    
+    // Ombre subtile pour la profondeur (une seule couche)
+    final shadowTextSpan = TextSpan(
+      text: 'HEALTHER',
+      style: textStyle.copyWith(
+        color: color.withOpacity(0.3),
+      ),
+    );
+    final shadowPainter = TextPainter(
+      text: shadowTextSpan,
+      textDirection: TextDirection.ltr,
+    );
+    shadowPainter.layout();
+    canvas.save();
+    canvas.translate(2, 2);
+    shadowPainter.paint(canvas, Offset.zero);
+    canvas.restore();
+    
+    // Texte principal net et clair
     textPainter.paint(canvas, Offset.zero);
     canvas.restore();
   }
