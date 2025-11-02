@@ -71,6 +71,9 @@ const fhirRoutes = require('./routes/fhir');
 const voiceAssistantRoutes = require('./routes/voice_assistant');
 const predictionRoutes = require('./routes/prediction');
 const alertsRoutes = require('./routes/alerts');
+const contactTracingRoutes = require('./routes/contact_tracing');
+const multiChannelNotificationRoutes = require('./routes/multi_channel_notifications');
+const medicationRoutes = require('./routes/medications');
 
 // Importer monitoringService APRÈS les autres routes
 const monitoringService = require('./services/monitoring_service');
@@ -104,6 +107,9 @@ app.use('/api/fhir', fhirRoutes);
 app.use('/api/voice-assistant', voiceAssistantRoutes);
 app.use('/api/prediction', predictionRoutes);
 app.use('/api/alerts', alertsRoutes);
+app.use('/api/contact-tracing', contactTracingRoutes);
+app.use('/api/notifications-multichannel', multiChannelNotificationRoutes);
+app.use('/api/medications', medicationRoutes);
 app.use('/metrics', monitoringRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

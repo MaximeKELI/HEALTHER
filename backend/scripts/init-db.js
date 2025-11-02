@@ -298,6 +298,32 @@ db.serialize(() => {
     FOREIGN KEY (appointment_id) REFERENCES appointments(id)
   )`);
 
+  // Table de rappels de médicaments
+  db.run(`CREATE TABLE IF NOT EXISTS medication_reminders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    medication_name TEXT NOT NULL,
+    dosage TEXT,
+    frequency TEXT DEFAULT 'daily',
+    times_per_day INTEGER DEFAULT 1,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    notes TEXT,
+    interaction_warnings TEXT,
+    status TEXT DEFAULT 'active',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )`);
+
+  // Table d'observance des médicaments
+  db.run(`CREATE TABLE IF NOT EXISTS medication_adherence (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reminder_id INTEGER NOT NULL,
+    taken_at DATETIME NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reminder_id) REFERENCES medication_reminders(id)
+  )`);
+
   // Table de versions de modèles ML
   db.run(`CREATE TABLE IF NOT EXISTS ml_model_versions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
