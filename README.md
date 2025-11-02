@@ -1,39 +1,20 @@
 <div align="center">
 
-<!-- Animations CSS personnalisées -->
-<style>
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-  @keyframes slideIn {
-    from { transform: translateX(-20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  .animated-badge {
-    animation: bounce 2s infinite;
-    display: inline-block;
-  }
-  .feature-card {
-    animation: slideIn 0.5s ease-out;
-  }
-</style>
-
-# 🏥 <span style="color:#2563eb;font-family:'Italianno',cursive;font-size:2.5em;animation: pulse 2s infinite;text-shadow: 2px 2px 4px rgba(37,99,235,0.3);">HEALTHER</span>
+# 🏥✨ HEALTHER ✨🏥
 
 **Plateforme de Diagnostic Médical Intelligente pour la Santé Publique**
 
-<div style="animation: slideIn 1s ease-out;">
-  <p>
-    <img src="https://img.shields.io/badge/🚀-Version%202.0-blue?style=flat-square&logo=rocket" alt="Version">
-    <img src="https://img.shields.io/badge/⚡-Nouvelles%20Features-success?style=flat-square" alt="Nouvelles Features">
-    <img src="https://img.shields.io/badge/📱-100%25%20Responsive-blueviolet?style=flat-square" alt="Responsive">
-    <img src="https://img.shields.io/badge/🤖-IA%20Intégrée-orange?style=flat-square" alt="IA">
-  </p>
+---
+
+### 🚀 Version 2.0 - Nouvelles Fonctionnalités 2025
+
+<div align="center">
+
+[![Version](https://img.shields.io/badge/Version-2.0-blue.svg?style=for-the-badge&logo=rocket&logoColor=white)](https://github.com/votre-repo/HEALTHER)
+[![Features](https://img.shields.io/badge/Nouvelles%20Features-40+-success.svg?style=for-the-badge&logo=sparkles&logoColor=white)](https://github.com/votre-repo/HEALTHER)
+[![Responsive](https://img.shields.io/badge/100%25-Responsive-blueviolet.svg?style=for-the-badge&logo=mobile&logoColor=white)](https://github.com/votre-repo/HEALTHER)
+[![IA](https://img.shields.io/badge/IA-Intégrée-orange.svg?style=for-the-badge&logo=brain&logoColor=white)](https://github.com/votre-repo/HEALTHER)
+
 </div>
 
 [![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=for-the-badge&logo=version)](https://github.com/votre-repo/HEALTHER)
@@ -57,8 +38,6 @@
 ---
 
 ## 📋 Table des Matières
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0;">
 
 ### 🎯 Navigation Principale
 - [🎯 Vue d'ensemble](#-vue-densemble)
@@ -99,8 +78,6 @@
 - [🤝 Contribution](#-contribution)
 - [📄 License](#-license)
 
-</div>
-
 ---
 
 ## 🎯 Vue d'ensemble
@@ -109,51 +86,48 @@
 
 ### Objectifs Principaux
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0;">
-
-<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
 
 #### 🎯 Diagnostic Rapide
 Analyse d'images microscopiques via IA pour détecter les parasites (Paludisme, Typhoïde) avec score de confiance.
 
-</div>
-
-<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</td>
+<td width="33%" align="center" valign="top">
 
 #### 📍 Géolocalisation
 Tracking géographique des cas pour surveillance épidémiologique avec cartographie interactive.
 
-</div>
-
-<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</td>
+<td width="33%" align="center" valign="top">
 
 #### 🌐 Fonctionnement Offline
 Synchronisation automatique dès le retour de la connexion avec queue intelligente.
 
-</div>
-
-<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</td>
+</tr>
+<tr>
+<td width="33%" align="center" valign="top">
 
 #### 👥 Multi-Rôles
 Système de permissions RBAC pour agents, superviseurs, épidémiologistes et administrateurs.
 
-</div>
-
-<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</td>
+<td width="33%" align="center" valign="top">
 
 #### 📊 Tableau de Bord
 Visualisation en temps réel des statistiques et tendances avec graphiques interactifs.
 
-</div>
-
-<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</td>
+<td width="33%" align="center" valign="top">
 
 #### 🤖 Intelligence Artificielle
 Chatbot Gemini, Assistant Vocal, OCR Prescription, Prédictions ML avancées.
 
-</div>
-
-</div>
+</td>
+</tr>
+</table>
 
 ---
 
@@ -1431,49 +1405,27 @@ Ce projet est sous licence **MIT**. Voir le fichier `LICENSE` pour plus de déta
 
 ---
 
----
-
-<div align="center">
-
 ## 📊 Statistiques du Projet
 
-<div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 20px 0;">
+<div align="center">
 
-<div style="padding: 15px; border: 2px solid #2563eb; border-radius: 10px; min-width: 200px;">
-  <h3>📱 Écrans</h3>
-  <p style="font-size: 2em; font-weight: bold; color: #2563eb;">24</p>
-  <p>Écrans Flutter</p>
-</div>
+| 📱 Écrans | 🔌 API Routes | 🎨 Fonctionnalités | 🤖 IA/ML |
+|:---------:|:-------------:|:------------------:|:--------:|
+| **✨ 24**<br/>Écrans Flutter | **🔌 50+**<br/>Endpoints REST | **🎨 40+**<br/>Fonctionnalités majeures | **🤖 5**<br/>Services IA intégrés |
 
-<div style="padding: 15px; border: 2px solid #10b981; border-radius: 10px; min-width: 200px;">
-  <h3>🔌 API Routes</h3>
-  <p style="font-size: 2em; font-weight: bold; color: #10b981;">50+</p>
-  <p>Endpoints REST</p>
-</div>
-
-<div style="padding: 15px; border: 2px solid #f59e0b; border-radius: 10px; min-width: 200px;">
-  <h3>🎨 Fonctionnalités</h3>
-  <p style="font-size: 2em; font-weight: bold; color: #f59e0b;">40+</p>
-  <p>Fonctionnalités majeures</p>
-</div>
-
-<div style="padding: 15px; border: 2px solid #8b5cf6; border-radius: 10px; min-width: 200px;">
-  <h3>🤖 IA/ML</h3>
-  <p style="font-size: 2em; font-weight: bold; color: #8b5cf6;">5</p>
-  <p>Services IA intégrés</p>
-</div>
-
-</div>
+<sub>📈 *Statistiques mises à jour en janvier 2025*</sub>
 
 </div>
 
 ---
-
-<div align="center">
 
 ## 🎯 Fonctionnalités Clés par Catégorie
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
+<div align="center">
+
+<table>
+<tr>
+<td width="25%" valign="top">
 
 ### 🔐 Authentification
 - ✅ Inscription complète
@@ -1481,11 +1433,17 @@ Ce projet est sous licence **MIT**. Voir le fichier `LICENSE` pour plus de déta
 - ✅ Authentification biométrique
 - ✅ 2FA (TOTP)
 
+</td>
+<td width="25%" valign="top">
+
 ### 🔬 Diagnostic
 - ✅ Capture et analyse ML
 - ✅ OCR Prescription
 - ✅ Géolocalisation
 - ✅ Feedback ML
+
+</td>
+<td width="25%" valign="top">
 
 ### 📊 Analytics
 - ✅ Dashboard temps réel
@@ -1493,11 +1451,19 @@ Ce projet est sous licence **MIT**. Voir le fichier `LICENSE` pour plus de déta
 - ✅ Export PDF/Excel
 - ✅ Prédictions épidémiques
 
+</td>
+<td width="25%" valign="top">
+
 ### 🚨 Alertes
 - ✅ Alertes proactives
 - ✅ Géofencing
 - ✅ Détection d'anomalies
 - ✅ Notifications push
+
+</td>
+</tr>
+<tr>
+<td width="25%" valign="top">
 
 ### 🎮 Gamification
 - ✅ Système de points
@@ -1505,11 +1471,17 @@ Ce projet est sous licence **MIT**. Voir le fichier `LICENSE` pour plus de déta
 - ✅ Leaderboard
 - ✅ Quiz éducatif
 
+</td>
+<td width="25%" valign="top">
+
 ### 🤖 IA
 - ✅ Chatbot Gemini
 - ✅ Assistant Vocal
 - ✅ Analyse intelligente
 - ✅ Prédictions ML
+
+</td>
+<td width="25%" valign="top">
 
 ### 📱 Interface
 - ✅ Design Responsive
@@ -1517,7 +1489,18 @@ Ce projet est sous licence **MIT**. Voir le fichier `LICENSE` pour plus de déta
 - ✅ Thèmes personnalisables
 - ✅ Galerie photos
 
-</div>
+</td>
+<td width="25%" valign="top">
+
+### 🌐 Avancé
+- ✅ Offline Sync
+- ✅ WebSocket
+- ✅ Géofencing
+- ✅ Multi-rôles
+
+</td>
+</tr>
+</table>
 
 </div>
 
