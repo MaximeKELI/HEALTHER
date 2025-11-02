@@ -70,15 +70,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo HEALTHER animé
+                  // Logo HEALTHER animé (déjà contient le texte HEALTHER)
                   const HealtherLogo(size: 120, animate: true),
-                  const SizedBox(height: 32),
-                  
-                  // Titre HEALTHER avec effet d'écriture
-                  HealtherAnimatedTitle(
-                    fontSize: 42,
-                    showSubtitle: true,
-                  ),
                   const SizedBox(height: 48),
                   
                   // Champ Username

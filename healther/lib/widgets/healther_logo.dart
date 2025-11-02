@@ -183,52 +183,40 @@ class HealtherLogoPainter extends CustomPainter {
   }
 
   void _drawDecorativeElements(Canvas canvas, Size size, Paint paint) {
-    // Dessiner des croix médicales décoratives
-    final crossSize = size.width * 0.08;
-    final crossPaint = Paint()
-      ..color = color.withOpacity(0.3)
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    // Croix en haut à gauche
-    canvas.drawLine(
-      Offset(size.width * 0.1, size.height * 0.1),
-      Offset(size.width * 0.1 + crossSize, size.height * 0.1 + crossSize),
-      crossPaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.1 + crossSize, size.height * 0.1),
-      Offset(size.width * 0.1, size.height * 0.1 + crossSize),
-      crossPaint,
-    );
-
-    // Croix en bas à droite
-    canvas.drawLine(
-      Offset(size.width * 0.9 - crossSize, size.height * 0.9 - crossSize),
-      Offset(size.width * 0.9, size.height * 0.9),
-      crossPaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.9, size.height * 0.9 - crossSize),
-      Offset(size.width * 0.9 - crossSize, size.height * 0.9),
-      crossPaint,
-    );
-
-    // Dessiner des cercles décoratifs
+    // Dessiner des symboles médicaux décoratifs plus discrets
+    // Remplacement des croix par des cercles et des lignes plus subtiles
+    
+    // Dessiner des cercles décoratifs uniquement
     final circlePaint = Paint()
-      ..color = color.withOpacity(0.2)
+      ..color = color.withOpacity(0.15)
       ..style = PaintingStyle.fill;
 
+    // Cercles décoratifs discrets
     canvas.drawCircle(
       Offset(size.width * 0.15, size.height * 0.2),
-      size.width * 0.03,
+      size.width * 0.04,
       circlePaint,
     );
     canvas.drawCircle(
       Offset(size.width * 0.85, size.height * 0.8),
-      size.width * 0.03,
+      size.width * 0.04,
       circlePaint,
+    );
+    
+    // Ajouter des points décoratifs subtils
+    final dotPaint = Paint()
+      ..color = color.withOpacity(0.2)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(
+      Offset(size.width * 0.2, size.height * 0.15),
+      size.width * 0.015,
+      dotPaint,
+    );
+    canvas.drawCircle(
+      Offset(size.width * 0.8, size.height * 0.85),
+      size.width * 0.015,
+      dotPaint,
     );
   }
 
