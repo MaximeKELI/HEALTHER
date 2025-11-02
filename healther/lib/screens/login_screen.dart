@@ -1,4 +1,5 @@
 import 'home_screen.dart';
+import 'register_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/healther_logo.dart';
 import 'package:provider/provider.dart';
@@ -130,6 +131,20 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Text('Se connecter'),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Lien vers inscription
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                      );
+                    },
+                    child: const Text(
+                      'Pas encore de compte ? S\'inscrire',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ],
               ),
