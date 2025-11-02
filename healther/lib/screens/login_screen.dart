@@ -3,6 +3,7 @@ import 'register_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/healther_logo.dart';
 import 'package:provider/provider.dart';
+import '../utils/responsive_helper.dart';
 import '../providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,11 +61,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveHelper.isMobile(context);
+    final padding = ResponsiveHelper.getPadding(context);
+    
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+        child: ResponsiveHelper.centerContent(
+          context,
+          SingleChildScrollView(
+            padding: padding,
             child: Form(
               key: _formKey,
               child: Column(
@@ -72,8 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Logo HEALTHER animé (déjà contient le texte HEALTHER)
-                  const HealtherLogo(size: 120, animate: true),
-                  const SizedBox(height: 48),
+                  HealtherLogo(
+                    size: isMobile ? 100 : 120,
+                    animate: true,
+                  ),
+                  SizedBox(height: isMobile ? 32 : 48),
                   
                   // Champ Username
                   TextFormField(

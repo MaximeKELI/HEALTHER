@@ -1,6 +1,7 @@
 import 'map_heatmap_screen.dart';
 import '../services/api_service.dart';
 import 'package:flutter/material.dart';
+import '../utils/responsive_helper.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -65,41 +66,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
               : RefreshIndicator(
                   onRefresh: _loadStats,
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Statistiques globales
-                        _buildStatsCard(
-                          'Statistiques Globales',
-                          [
-                            _StatItem(
-                              'Total des cas',
-                              _stats!['global']?['total']?.toString() ?? '0',
-                              Icons.people,
-                              Colors.blue,
-                            ),
-                            _StatItem(
-                              'Cas positifs',
-                              _stats!['global']?['positifs']?.toString() ?? '0',
-                              Icons.warning,
-                              Colors.red,
-                            ),
-                            _StatItem(
-                              'Cas négatifs',
-                              _stats!['global']?['negatifs']?.toString() ?? '0',
-                              Icons.check_circle,
-                              Colors.green,
-                            ),
-                            _StatItem(
-                              'Taux de positivité',
-                              '${_stats!['global']?['taux_positivite']?.toString() ?? '0'}%',
-                              Icons.percent,
-                              Colors.orange,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
+                    padding: ResponsiveHelper.getPadding(context),
+                    child: ResponsiveHelper.centerContent(
+                      context,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Statistiques globales
+                          _buildStatsCard(
+                            'Statistiques Globales',
+                            [
+                              _StatItem(
+                                'Total des cas',
+                                _stats!['global']?['total']?.toString() ?? '0',
+                                Icons.people,
+                                Colors.blue,
+                              ),
+                              _StatItem(
+                                'Cas positifs',
+                                _stats!['global']?['positifs']?.toString() ?? '0',
+                                Icons.warning,
+                                Colors.red,
+                              ),
+                              _StatItem(
+                                'Cas négatifs',
+                                _stats!['global']?['negatifs']?.toString() ?? '0',
+                                Icons.check_circle,
+                                Colors.green,
+                              ),
+                              _StatItem(
+                                'Taux de positivité',
+                                '${_stats!['global']?['taux_positivite']?.toString() ?? '0'}%',
+                                Icons.percent,
+                                Colors.orange,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
 
                         // Par maladie
                         if (_stats!['par_maladie'] != null) ...[
@@ -179,6 +182,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
+              ),
     );
   }
 

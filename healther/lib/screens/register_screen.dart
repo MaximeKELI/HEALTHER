@@ -2,6 +2,7 @@ import 'home_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/healther_logo.dart';
 import 'package:provider/provider.dart';
+import '../utils/responsive_helper.dart';
 import '../providers/auth_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -92,11 +93,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveHelper.isMobile(context);
+    final padding = ResponsiveHelper.getPadding(context);
+    final titleFontSize = ResponsiveHelper.getFontSize(
+      context,
+      mobile: 24,
+      tablet: 28,
+      desktop: 32,
+    );
+    
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+        child: ResponsiveHelper.centerContent(
+          context,
+          SingleChildScrollView(
+            padding: padding,
             child: Form(
               key: _formKey,
               child: Column(
@@ -104,19 +115,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Logo HEALTHER animé
-                  const HealtherLogo(size: 100, animate: true),
-                  const SizedBox(height: 32),
+                  HealtherLogo(
+                    size: isMobile ? 80 : 100,
+                    animate: true,
+                  ),
+                  SizedBox(height: isMobile ? 24 : 32),
                   
                   // Titre
-                  const Text(
+                  Text(
                     'Créer un compte',
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: isMobile ? 16 : 24),
                   
                   // Champ Username (obligatoire)
                   TextFormField(

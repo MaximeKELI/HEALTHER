@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../services/camera_service.dart';
+import '../utils/responsive_helper.dart';
 import '../providers/diagnostic_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../providers/gamification_provider.dart';
@@ -178,12 +179,16 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final padding = ResponsiveHelper.getPadding(context);
+    
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        padding: padding,
+        child: ResponsiveHelper.centerContent(
+          context,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             // Sélection du type de maladie
             Card(
               child: Padding(
@@ -392,9 +397,12 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _isSubmitting ? null : _submitDiagnostic,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                  vertical: ResponsiveHelper.isMobile(context) ? 14 : 16,
+                  horizontal: ResponsiveHelper.isMobile(context) ? 12 : 16,
                 ),
+              ),
                 child: _isSubmitting
                     ? const SizedBox(
                         height: 20,
@@ -405,6 +413,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
               ),
             ],
           ],
+        ),
         ),
       ),
     );
