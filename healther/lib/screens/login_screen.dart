@@ -1,4 +1,3 @@
-import 'home_screen.dart';
 import 'register_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/healther_logo.dart';
@@ -46,8 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (success) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      // Naviguer vers la route racine pour que AuthWrapper vérifie l'authentification
+      // Cela garantit que tous les providers sont correctement initialisés
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/',
+        (route) => false, // Retire toutes les routes précédentes
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

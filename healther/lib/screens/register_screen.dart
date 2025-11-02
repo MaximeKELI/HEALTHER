@@ -1,4 +1,3 @@
-import 'home_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/healther_logo.dart';
 import 'package:provider/provider.dart';
@@ -72,13 +71,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!mounted) return;
 
     if (success) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      // Naviguer vers la route racine pour que AuthWrapper vérifie l'authentification
+      // Cela garantit que tous les providers sont correctement initialisés
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/',
+        (route) => false, // Retire toutes les routes précédentes
       );
+      
+      // Attendre un court délai pour que la navigation soit complète
+      await Future.delayed(const Duration(milliseconds: 300));
+      
+      if (!mounted) return;
+      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Inscription réussie ! Bienvenue sur HEALTHER'),
           backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
         ),
       );
     } else {

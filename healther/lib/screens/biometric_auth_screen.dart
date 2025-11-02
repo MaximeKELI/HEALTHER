@@ -45,8 +45,12 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen> {
       if (!mounted) return;
 
       if (authenticated) {
-        // Authentification réussie - naviguer vers l'écran d'accueil
-        Navigator.of(context).pushReplacementNamed('/home');
+        // Authentification réussie - naviguer vers la route racine
+        // AuthWrapper vérifiera l'authentification et affichera HomeScreen
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/',
+          (route) => false, // Retire toutes les routes précédentes
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

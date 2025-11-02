@@ -63,7 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () async {
               await authProvider.logout();
               if (!mounted) return;
-              Navigator.of(context).pushReplacementNamed('/login');
+              // Naviguer vers la route racine pour que AuthWrapper gère la redirection
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                '/',
+                (route) => false, // Retire toutes les routes précédentes
+              );
             },
             tooltip: 'Déconnexion',
           ),
