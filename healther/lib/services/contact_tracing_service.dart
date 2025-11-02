@@ -1,11 +1,19 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'api_service.dart';
+import 'package:http/http.dart' as http;
 
 /// Service pour Contact Tracing / Investigation d'Épidémie
 class ContactTracingService {
   final ApiService _apiService = ApiService();
-  String get baseUrl => _apiService._baseUrl;
+  
+  String get baseUrl {
+    // Utiliser la même méthode que ApiService pour obtenir l'URL
+    const String envUrl = String.fromEnvironment('API_BASE_URL', defaultValue: '');
+    if (envUrl.isNotEmpty) {
+      return envUrl;
+    }
+    return 'http://localhost:3000/api';
+  }
   
   Map<String, String> get _headers {
     final token = _apiService.getToken();
