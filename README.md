@@ -1,8 +1,40 @@
 <div align="center">
 
-# 🏥 <span style="color:#2563eb;font-family:'Italianno',cursive;font-size:2.5em;animation: pulse 2s infinite">HEALTHER</span>
+<!-- Animations CSS personnalisées -->
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  @keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .animated-badge {
+    animation: bounce 2s infinite;
+    display: inline-block;
+  }
+  .feature-card {
+    animation: slideIn 0.5s ease-out;
+  }
+</style>
+
+# 🏥 <span style="color:#2563eb;font-family:'Italianno',cursive;font-size:2.5em;animation: pulse 2s infinite;text-shadow: 2px 2px 4px rgba(37,99,235,0.3);">HEALTHER</span>
 
 **Plateforme de Diagnostic Médical Intelligente pour la Santé Publique**
+
+<div style="animation: slideIn 1s ease-out;">
+  <p>
+    <img src="https://img.shields.io/badge/🚀-Version%202.0-blue?style=flat-square&logo=rocket" alt="Version">
+    <img src="https://img.shields.io/badge/⚡-Nouvelles%20Features-success?style=flat-square" alt="Nouvelles Features">
+    <img src="https://img.shields.io/badge/📱-100%25%20Responsive-blueviolet?style=flat-square" alt="Responsive">
+    <img src="https://img.shields.io/badge/🤖-IA%20Intégrée-orange?style=flat-square" alt="IA">
+  </p>
+</div>
 
 [![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=for-the-badge&logo=version)](https://github.com/votre-repo/HEALTHER)
 [![Backend](https://img.shields.io/badge/Backend-Node.js-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
@@ -26,24 +58,48 @@
 
 ## 📋 Table des Matières
 
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0;">
+
+### 🎯 Navigation Principale
 - [🎯 Vue d'ensemble](#-vue-densemble)
 - [✨ Fonctionnalités](#-fonctionnalités)
+  - [🔬 Diagnostic Médical](#-diagnostic-médical)
+  - [👥 Gestion des Utilisateurs](#-gestion-des-utilisateurs)
+  - [📊 Tableau de Bord](#-tableau-de-bord-et-rapports)
+  - [🌐 Fonctionnalités Avancées](#-fonctionnalités-avancées)
 - [🏗️ Architecture](#️-architecture)
 - [🗄️ Modèle de Données](#️-modèle-de-données)
   - [MCD (Modèle Conceptuel de Données)](#mcd-modèle-conceptuel-de-données)
   - [MLD (Modèle Logique de Données)](#mld-modèle-logique-de-données)
+
+### 🛠️ Installation & Configuration
 - [🛠️ Technologies](#️-technologies)
 - [📦 Installation](#-installation)
 - [⚙️ Configuration](#️-configuration)
 - [🚀 Démarrage](#-démarrage)
+
+### 📚 Documentation & Utilisation
 - [📱 Utilisation](#-utilisation)
 - [🔐 Sécurité](#-sécurité)
 - [🤖 IA et ML](#-ia-et-ml)
 - [📊 API Documentation](#-api-documentation)
+  - [Authentification](#authentification)
+  - [Diagnostics](#diagnostics)
+  - [Chatbot IA](#chatbot-ia)
+  - [Dashboard & Analytics](#dashboard--analytics)
+  - [Prédiction & Alertes](#prédiction--alertes)
+  - [Voice Assistant & OCR](#voice-assistant--ocr)
+
+### 🧪 Tests & Évolution
 - [🧪 Tests](#-tests)
 - [📈 Roadmap](#-roadmap)
+- [🎉 Nouvelles Fonctionnalités (2025)](#-nouvelles-fonctionnalités-2025)
+
+### 🤝 Contribution
 - [🤝 Contribution](#-contribution)
 - [📄 License](#-license)
+
+</div>
 
 ---
 
@@ -53,12 +109,51 @@
 
 ### Objectifs Principaux
 
-- 🎯 **Diagnostic Rapide** : Analyse d'images microscopiques via IA pour détecter les parasites
-- 📍 **Géolocalisation** : Tracking géographique des cas pour surveillance épidémiologique
-- 🌐 **Fonctionnement Offline** : Synchronisation automatique dès le retour de la connexion
-- 👥 **Multi-Rôles** : Système de permissions pour agents, superviseurs, épidémiologistes et administrateurs
-- 📊 **Tableau de Bord** : Visualisation en temps réel des statistiques et tendances
-- 🤖 **Chatbot IA** : Assistant conversationnel basé sur Gemini pour guidance et support
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0;">
+
+<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+#### 🎯 Diagnostic Rapide
+Analyse d'images microscopiques via IA pour détecter les parasites (Paludisme, Typhoïde) avec score de confiance.
+
+</div>
+
+<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+#### 📍 Géolocalisation
+Tracking géographique des cas pour surveillance épidémiologique avec cartographie interactive.
+
+</div>
+
+<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+#### 🌐 Fonctionnement Offline
+Synchronisation automatique dès le retour de la connexion avec queue intelligente.
+
+</div>
+
+<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+#### 👥 Multi-Rôles
+Système de permissions RBAC pour agents, superviseurs, épidémiologistes et administrateurs.
+
+</div>
+
+<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+#### 📊 Tableau de Bord
+Visualisation en temps réel des statistiques et tendances avec graphiques interactifs.
+
+</div>
+
+<div style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+#### 🤖 Intelligence Artificielle
+Chatbot Gemini, Assistant Vocal, OCR Prescription, Prédictions ML avancées.
+
+</div>
+
+</div>
 
 ---
 
@@ -77,6 +172,14 @@
 
 ### 👥 Gestion des Utilisateurs
 
+| Fonctionnalité | Description |
+|----------------|-------------|
+| 🔐 **Inscription** | Création de compte avec validation (email, mot de passe, etc.) |
+| 🔑 **Connexion** | Authentification sécurisée avec JWT |
+| 👤 **Profil Utilisateur** | Gestion du profil, photo de profil, informations personnelles |
+| 🔒 **Authentification Biométrique** | Support Touch ID, Face ID, empreinte digitale |
+| 🎭 **Multi-Rôles** | Système de permissions granulaire par rôle |
+
 | Rôle | Permissions |
 |------|-------------|
 | **Agent** | Créer diagnostics, voir ses propres diagnostics, modifier profil |
@@ -86,17 +189,47 @@
 
 ### 📊 Tableau de Bord et Rapports
 
-- 📈 **Statistiques en Temps Réel** : Cas positifs/négatifs, taux de positivité
+- 📈 **Statistiques en Temps Réel** : Cas positifs/négatifs, taux de positivité avec WebSocket
 - 📅 **Filtres Temporels** : Par date, région, préfecture
-- 📉 **Courbes Temporelles** : Évolution des cas sur le temps
-- 🌍 **Heatmap Géographique** : Visualisation des clusters épidémiques
-- 📄 **Export** : Génération de rapports CSV/Excel/PDF
+- 📉 **Courbes Temporelles** : Évolution des cas sur le temps avec graphiques animés
+- 🌍 **Heatmap Géographique** : Visualisation interactive des clusters épidémiques
+- 📊 **Analytics Avancé** : Dashboard professionnel avec graphiques interactifs (fl_chart)
+- 📄 **Export PDF/Excel** : Génération automatique de rapports avec visualisations
+- 🔄 **Dashboard Temps Réel** : Mise à jour automatique des statistiques
 
 ### 🌐 Fonctionnalités Avancées
 
+#### 🤖 Intelligence Artificielle et Machine Learning
+- 💬 **Chatbot IA Gemini** : Assistant conversationnel intelligent pour guidance
+- 🎤 **Assistant Vocal IA** : Interaction vocale avec transcription et synthèse
+- 📸 **OCR Prescription** : Scan et extraction automatique de prescriptions médicales
+- 🔮 **Prédiction Épidémique** : Prédictions futures avec détection d'anomalies
+- 📊 **Analyse ML Feedback** : Amélioration continue des modèles ML
+- 📝 **Analyse de Description** : Analyse intelligente des descriptions de diagnostics
+
+#### 🎮 Gamification et Engagement
+- 🏆 **Système de Points** : Points gagnés par activité (diagnostics, feedback, etc.)
+- 🎖️ **Badges et Récompenses** : Déblocage de badges selon les actions
+- 📈 **Leaderboard** : Classement des utilisateurs les plus actifs
+- 🎯 **Niveaux** : Progression par niveaux avec récompenses
+- 🎓 **Quiz Éducatif** : Mini-jeux interactifs pour apprendre sur les maladies
+
+#### 🚨 Alertes et Monitoring
+- ⚠️ **Alertes Proactives** : Système de seuils avec alertes critiques/avertissements
+- 🔔 **Géofencing** : Alertes automatiques lors de dépassement de seuils géographiques
+- 📱 **Notifications Push** : Alertes en temps réel via WebSocket
+- 📊 **Historique d'Alertes** : Suivi et consultation des alertes passées
+
+#### 📱 Interface et Expérience Utilisateur
+- 📱 **Design Responsive** : Adaptation automatique mobile/tablette/desktop
+- 🌓 **Mode Sombre** : Thème sombre avec personnalisation avancée
+- 🎨 **Thèmes Personnalisables** : 5 thèmes prédéfinis (Bleu, Vert, Orange, Violet, Rouge)
+- 🖼️ **Galerie de Photos** : Visualisation des diagnostics avec filtres par tags
+- 📱 **Navigation Adaptative** : Bottom Nav (mobile) / Navigation Rail (desktop)
+
+#### 🔧 Outils et Utilitaires
+- 📷 **Scanner Code-barres** : Scan de codes-barres médicaux
 - 💬 **Chat Contextuel** : Discussions par diagnostic avec mentions
-- 📱 **Notifications Push** : Alertes en temps réel (WebSocket)
-- 🔔 **Géofencing** : Alertes automatiques lors de dépassement de seuils
 - 📋 **Suivi Échantillons** : Traçabilité complète échantillon → labo → résultat
 - 🎯 **Campagnes** : Planification d'actions (pulvérisation, sensibilisation)
 - 📞 **Rendez-vous** : Gestion des rendez-vous patients avec rappels SMS
@@ -645,6 +778,16 @@ CREATE TABLE chatbot_messages (
 | **geolocator** | 11.x | Géolocalisation |
 | **image** | 4.x | Traitement images |
 | **mobile_scanner** | 7.x | Scanner code-barres |
+| **google_ml_kit** | 0.18+ | OCR et reconnaissance de texte |
+| **local_auth** | 2.3+ | Authentification biométrique |
+| **speech_to_text** | 6.x | Reconnaissance vocale |
+| **flutter_tts** | 3.x | Synthèse vocale |
+| **fl_chart** | 0.69+ | Graphiques interactifs |
+| **flutter_map** | 7.0+ | Cartes interactives |
+| **pdf** | 3.x | Génération PDF |
+| **excel** | 2.x | Génération Excel |
+| **share_plus** | 10.x | Partage de fichiers |
+| **lottie** | 3.3+ | Animations |
 | **flutter_localizations** | - | Internationalisation |
 
 ---
@@ -812,13 +955,19 @@ flutter run -d linux --dart-define=API_BASE_URL=http://votre-api:3000
 
 ## 📱 Utilisation
 
-### Première Connexion
+### Première Utilisation
 
 1. **Lancer l'application Flutter**
-2. **S'identifier** :
+2. **Créer un compte** :
+   - Cliquer sur "Pas encore de compte ? S'inscrire"
+   - Remplir le formulaire d'inscription
+   - Les champs obligatoires sont marqués d'un astérisque (*)
+   - Validation automatique des données
+3. **OU S'identifier** (si compte existant) :
    - Username : `agent1`
    - Password : `Agent123!`
-3. **Autoriser les permissions** : Caméra, Localisation, Stockage
+4. **Autoriser les permissions** : Caméra, Localisation, Stockage, Microphone (pour assistant vocal)
+5. **Optionnel** : Activer l'authentification biométrique dans les paramètres
 
 ### Créer un Diagnostic
 
@@ -843,12 +992,59 @@ flutter run -d linux --dart-define=API_BASE_URL=http://votre-api:3000
 
 ### Utiliser le Chatbot IA
 
-1. Ouvrir le **menu**
+1. Ouvrir le **menu** (drawer ou navigation latérale)
 2. Cliquer sur **"Chatbot IA"**
 3. Poser des questions, exemples :
    - "Quels sont les symptômes du paludisme ?"
    - "Comment utiliser cette application ?"
    - "Quelle est la différence entre paludisme et typhoïde ?"
+
+### Utiliser l'Assistant Vocal IA
+
+1. Ouvrir le **menu** → **"Assistant Vocal IA"**
+2. Cliquer sur le bouton **microphone** pour commencer à parler
+3. L'assistant transcrit votre voix et répond vocalement
+4. Support des commandes vocales pour l'analyse de diagnostics
+
+### Scanner une Prescription (OCR)
+
+1. Ouvrir le **menu** → **"Scan Prescription"**
+2. Prendre une photo ou sélectionner depuis la galerie
+3. L'OCR extrait automatiquement :
+   - Nom du patient
+   - Date
+   - Médicaments et dosages
+   - Instructions
+   - Nom du médecin
+4. Corriger si nécessaire et enregistrer
+
+### Consulter les Prédictions Épidémiques
+
+1. Ouvrir le **menu** → **"Prédiction Épidémique"**
+2. Filtrer par région et type de maladie
+3. Visualiser les prédictions futures avec graphiques
+4. Consulter les alertes d'anomalies détectées
+
+### Consulter les Alertes Proactives
+
+1. Ouvrir le **menu** → **"Alertes Proactives"**
+2. Filtrer par région et maladie
+3. Visualiser les alertes critiques et avertissements
+4. Consulter l'historique des alertes
+
+### Jouer au Quiz Éducatif
+
+1. Ouvrir le **menu** → **"Quiz Éducatif"**
+2. Répondre aux questions sur les maladies tropicales
+3. Gagner des points de gamification
+4. Consulter les explications après chaque réponse
+
+### Visualiser la Galerie
+
+1. Ouvrir le **menu** → **"Galerie de Photos"**
+2. Filtrer par tags (Région, Maladie, Statut, Date)
+3. Changer entre vue grille et liste
+4. Appuyer sur une image pour visualisation en plein écran
 
 ---
 
@@ -952,13 +1148,32 @@ GEMINI_MODEL=models/gemini-2.5-flash
 | `GET` | `/api/chatbot/conversations` | Liste conversations | ✅ |
 | `POST` | `/api/chatbot/conversation/:id/close` | Fermer conversation | ✅ |
 
-#### Dashboard
+#### Dashboard & Analytics
 
 | Méthode | Endpoint | Description | Auth |
 |---------|----------|-------------|------|
 | `GET` | `/api/dashboard/stats` | Statistiques globales | ✅ |
 | `GET` | `/api/dashboard/trends` | Tendances temporelles | ✅ |
 | `GET` | `/api/dashboard/heatmap` | Heatmap géographique | ✅ |
+
+#### Prédiction & Alertes
+
+| Méthode | Endpoint | Description | Auth |
+|---------|----------|-------------|------|
+| `POST` | `/api/prediction/epidemics` | Prédire épidémies futures | ✅ |
+| `POST` | `/api/prediction/anomalies` | Détecter anomalies | ✅ |
+| `GET` | `/api/alerts/check` | Vérifier seuils et alertes | ✅ |
+| `POST` | `/api/alerts/threshold` | Configurer seuil personnalisé | ✅ |
+| `GET` | `/api/alerts/history` | Historique des alertes | ✅ |
+
+#### Voice Assistant & OCR
+
+| Méthode | Endpoint | Description | Auth |
+|---------|----------|-------------|------|
+| `POST` | `/api/voice-assistant/transcribe` | Transcription audio | ✅ |
+| `POST` | `/api/voice-assistant/chat` | Chat avec contexte | ✅ |
+| `POST` | `/api/voice-assistant/speak` | Synthèse vocale | ✅ |
+| `POST` | `/api/voice-assistant/analyze-diagnostic` | Analyse description | ✅ |
 
 ### Exemple de Requête
 
@@ -1029,37 +1244,55 @@ flutter test integration_test/
 
 ### ✅ Phase 1 - Complétée
 
-- [x] Architecture backend/frontend
+- [x] Architecture backend/frontend complète
 - [x] Authentification JWT avec refresh tokens
+- [x] **Inscription utilisateurs** avec validation complète
+- [x] **Authentification biométrique** (Touch ID, Face ID, empreinte)
 - [x] CRUD diagnostics avec analyse ML
-- [x] Géolocalisation et tracking
-- [x] Système de permissions RBAC
-- [x] Dashboard avec statistiques
+- [x] Géolocalisation et tracking automatique
+- [x] Système de permissions RBAC granulaire
+- [x] Dashboard avec statistiques en temps réel
+- [x] **Dashboard Analytics Avancé** avec graphiques interactifs
+- [x] **Export rapports PDF/Excel** avec visualisations
 - [x] Notifications temps réel (WebSocket)
+- [x] **Système d'Alertes Proactives** avec seuils configurables
 - [x] Chatbot IA Gemini
+- [x] **Assistant Vocal IA** avec transcription et synthèse
 - [x] Upload photos de profil
-- [x] Fonctionnement offline avec sync
+- [x] Fonctionnement offline avec sync intelligent
+- [x] **Design Responsive** (mobile/tablette/desktop)
+- [x] **Mode Sombre** avec thèmes personnalisables
+- [x] **OCR Prescription** avec extraction automatique
+- [x] **Prédiction Épidémique** avec détection d'anomalies
+- [x] **Gamification** (points, badges, leaderboard)
+- [x] **Galerie de Photos** avec filtres par tags
+- [x] **Quiz Éducatif** interactif
+- [x] **Scanner Code-barres** médical
+- [x] **Carte Heatmap** interactive avec propagation épidémique
 
-### 🚀 Phase 2 - En cours
+### 🚀 Phase 2 - En cours / À optimiser
 
-- [ ] Export rapports PDF/Excel
+- [ ] Tests automatisés complets (backend + frontend)
 - [ ] Intégration SMS/USSD
 - [ ] Intégration WhatsApp Business
 - [ ] FHIR/HL7 pour échange de données
 - [ ] Application web admin console
 - [ ] Monitoring Prometheus/Grafana
-- [ ] Tests automatisés complets
-- [ ] Documentation API complète
+- [ ] Documentation API complète avec exemples
+- [ ] PWA complète (Progressive Web App)
+- [ ] Notifications push natives (Firebase)
 
-### 🔮 Phase 3 - À venir
+### 🔮 Phase 3 - À venir / Futures améliorations
 
-- [ ] Application mobile native (Android/iOS)
-- [ ] Mode sombre
-- [ ] Multilingue complet (FR/EN/local)
+- [ ] Application mobile native (Android/iOS) optimisée
+- [ ] Multilingue complet (FR/EN/local) avec traduction automatique
 - [ ] Vidéos tutoriels intégrés
-- [ ] Analyse prédictive avancée
+- [ ] Analyse prédictive avancée avec ML dédié
 - [ ] Intégration blockchain pour traçabilité
 - [ ] API publique pour partenaires
+- [ ] Streaming vidéo pour télémédecine (WebRTC)
+- [ ] Accessibilité avancée (lecteur écran, navigation clavier)
+- [ ] Widgets home screen (iOS/Android)
 
 ---
 
@@ -1116,5 +1349,190 @@ Ce projet est sous licence **MIT**. Voir le fichier `LICENSE` pour plus de déta
 
 ---
 
-*Dernière mise à jour : Novembre 2024*
-# HEALTHER
+---
+
+## 🎉 Nouvelles Fonctionnalités (2025)
+
+### ✨ Version 2.0 - Fonctionnalités Hackathon
+
+#### 🎨 Interface & Expérience Utilisateur
+- ✅ **Design Responsive** : Adaptation automatique mobile/tablette/desktop
+  - Navigation adaptative (Bottom Nav / Navigation Rail)
+  - Padding et tailles de police adaptatifs
+  - Grilles responsive avec colonnes dynamiques
+  - Helper `ResponsiveHelper` pour cohérence globale
+  
+- ✅ **Mode Sombre Avancé** : Thèmes personnalisables
+  - Mode clair/sombre/système
+  - 5 thèmes prédéfinis (Bleu, Vert, Orange, Violet, Rouge)
+  - Sauvegarde des préférences utilisateur
+  
+- ✅ **Inscription Complète** : Système d'inscription avec validation
+  - Formulaire complet avec validation en temps réel
+  - Vérification email, mot de passe, confirmation
+  - Messages d'erreur clairs et explicites
+  - Connexion automatique après inscription
+
+#### 🤖 Intelligence Artificielle Avancée
+- ✅ **Assistant Vocal IA** : Interaction vocale complète
+  - Transcription speech-to-text
+  - Synthèse vocale text-to-speech
+  - Intégration Gemini pour réponses intelligentes
+  - Analyse de descriptions de diagnostics
+  
+- ✅ **OCR Prescription** : Scan de prescriptions médicales
+  - Reconnaissance de texte avec Google ML Kit
+  - Extraction automatique d'informations structurées
+  - Correction manuelle possible
+  - Interface intuitive
+  
+- ✅ **Prédiction Épidémique** : Prédictions ML avancées
+  - Prédictions futures (3-30 jours)
+  - Détection d'anomalies automatique
+  - Visualisations avec graphiques interactifs
+  - Indicateur de confiance des prédictions
+
+#### 📊 Analytics & Rapports
+- ✅ **Analytics Avancé** : Dashboard professionnel
+  - Graphiques interactifs (fl_chart)
+  - Filtres par date, région, maladie
+  - Export PDF avec visualisations
+  - Export Excel avec données structurées
+  
+- ✅ **Système d'Alertes Proactives** : Monitoring intelligent
+  - Vérification automatique de seuils
+  - Alertes critiques et avertissements
+  - Historique des alertes
+  - Configuration de seuils personnalisés
+
+#### 🎮 Gamification
+- ✅ **Système de Gamification Complet**
+  - Points par activité (diagnostics, feedback, quiz)
+  - Badges et récompenses
+  - Leaderboard des utilisateurs
+  - Niveaux de progression
+  - Quiz éducatif interactif avec points
+
+#### 🖼️ Visualisation
+- ✅ **Galerie de Photos** : Visualisation avancée
+  - Vue grille et liste
+  - Filtres par tags (Région, Maladie, Statut, Date)
+  - Visualisation en plein écran
+  - Support images locales et base64
+  
+- ✅ **Carte Heatmap** : Cartographie interactive
+  - Visualisation des clusters épidémiques
+  - Propagation animée des épidémies
+  - Filtres par date et région
+
+#### 🔧 Outils
+- ✅ **Scanner Code-barres** : Scan de codes médicaux
+- ✅ **Authentification Biométrique** : Touch ID, Face ID, empreinte
+
+---
+
+---
+
+<div align="center">
+
+## 📊 Statistiques du Projet
+
+<div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 20px 0;">
+
+<div style="padding: 15px; border: 2px solid #2563eb; border-radius: 10px; min-width: 200px;">
+  <h3>📱 Écrans</h3>
+  <p style="font-size: 2em; font-weight: bold; color: #2563eb;">24</p>
+  <p>Écrans Flutter</p>
+</div>
+
+<div style="padding: 15px; border: 2px solid #10b981; border-radius: 10px; min-width: 200px;">
+  <h3>🔌 API Routes</h3>
+  <p style="font-size: 2em; font-weight: bold; color: #10b981;">50+</p>
+  <p>Endpoints REST</p>
+</div>
+
+<div style="padding: 15px; border: 2px solid #f59e0b; border-radius: 10px; min-width: 200px;">
+  <h3>🎨 Fonctionnalités</h3>
+  <p style="font-size: 2em; font-weight: bold; color: #f59e0b;">40+</p>
+  <p>Fonctionnalités majeures</p>
+</div>
+
+<div style="padding: 15px; border: 2px solid #8b5cf6; border-radius: 10px; min-width: 200px;">
+  <h3>🤖 IA/ML</h3>
+  <p style="font-size: 2em; font-weight: bold; color: #8b5cf6;">5</p>
+  <p>Services IA intégrés</p>
+</div>
+
+</div>
+
+</div>
+
+---
+
+<div align="center">
+
+## 🎯 Fonctionnalités Clés par Catégorie
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
+
+### 🔐 Authentification
+- ✅ Inscription complète
+- ✅ Connexion JWT
+- ✅ Authentification biométrique
+- ✅ 2FA (TOTP)
+
+### 🔬 Diagnostic
+- ✅ Capture et analyse ML
+- ✅ OCR Prescription
+- ✅ Géolocalisation
+- ✅ Feedback ML
+
+### 📊 Analytics
+- ✅ Dashboard temps réel
+- ✅ Analytics avancé
+- ✅ Export PDF/Excel
+- ✅ Prédictions épidémiques
+
+### 🚨 Alertes
+- ✅ Alertes proactives
+- ✅ Géofencing
+- ✅ Détection d'anomalies
+- ✅ Notifications push
+
+### 🎮 Gamification
+- ✅ Système de points
+- ✅ Badges et récompenses
+- ✅ Leaderboard
+- ✅ Quiz éducatif
+
+### 🤖 IA
+- ✅ Chatbot Gemini
+- ✅ Assistant Vocal
+- ✅ Analyse intelligente
+- ✅ Prédictions ML
+
+### 📱 Interface
+- ✅ Design Responsive
+- ✅ Mode Sombre
+- ✅ Thèmes personnalisables
+- ✅ Galerie photos
+
+</div>
+
+</div>
+
+---
+
+*Dernière mise à jour : Novembre 2024 → Janvier 2025*
+
+<div align="center">
+
+<p>
+  <img src="https://img.shields.io/badge/Made%20with-❤️-red?style=flat-square" alt="Made with love">
+  <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square" alt="Status">
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License">
+</p>
+
+<p><strong>Fait avec ❤️ pour améliorer la santé publique</strong></p>
+
+</div>
