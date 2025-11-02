@@ -1,9 +1,9 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:healther/main.dart' as app;
+import 'package:flutter_test/flutter_test.dart';
 import 'package:healther/screens/register_screen.dart';
 import 'package:healther/providers/auth_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 
 void main() {
   group('Tests d\'inscription', () {
