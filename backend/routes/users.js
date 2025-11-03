@@ -34,8 +34,16 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB pour les photos de profil
   fileFilter: (req, file, cb) => {
-    const allowed = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+    const allowed = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/heic', 'image/heif', 'image/pjpeg', 'image/x-png'];
     if (allowed.includes(file.mimetype)) return cb(null, true);
+    // Certains clients envoient application/octet-stream, on se rabat sur l'extension
+    if (file.mimetype === 'application/octet-stream') {
+      const ext = path.extname(file.originalname || '').toLowerCase();
+      const allowedExt = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'];
+      if (allowedExt.includes(ext)) {
+        return cb(null, true);
+      }
+    }
     cb(new Error('Type de fichier non supporté. Utilisez JPEG, PNG ou WebP'));
   }
 });
@@ -304,7 +312,17 @@ router.put('/:id', authenticateToken, async (req, res) => {
 });
 
 // Upload/Mise à jour photo de profil
-router.put('/:id/profile-picture', authenticateToken, upload.single('profile_picture'), async (req, res) => {
+// Handler avec gestion d'erreur Multer explicite
+router.put('/:id/profile-picture', authenticateToken, (req, res, next) => {
+  upload.single('profile_picture')(req, res, function(err) {
+    if (err) {
+      // Erreurs d'upload (taille, type)
+      console.error('Erreur upload (multer):', err);
+      return res.status(400).json({ error: err.message || 'Erreur upload' });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = parseInt(id);

@@ -114,8 +114,12 @@ class StorageService {
       return await this.minioClient.presignedGetObject(this.bucket, key, expiresIn);
     }
     
-    // Local: retourner URL relative
-    const baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    // Local: retourner URL absolue côté API (sans /api)
+    let baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    // Si API_BASE_URL contient un suffixe /api, le retirer pour servir les fichiers statiques
+    if (baseUrl.endsWith('/api')) {
+      baseUrl = baseUrl.slice(0, -4);
+    }
     return `${baseUrl}/${key}`;
   }
 

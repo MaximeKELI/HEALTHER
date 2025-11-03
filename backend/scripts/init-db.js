@@ -25,6 +25,20 @@ db.serialize(() => {
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 
+  // Colonnes manquantes sur users (migration souple)
+  db.all(`PRAGMA table_info(users)`, (err, rows) => {
+    if (err) return console.error('PRAGMA users error:', err);
+    const cols = rows.map(r => r.name);
+    const addColumn = (name, type) => {
+      if (!cols.includes(name)) {
+        db.run(`ALTER TABLE users ADD COLUMN ${name} ${type}`);
+        console.log(`➡️  Colonne ajoutée: users.${name}`);
+      }
+    };
+    addColumn('profile_picture', 'TEXT');
+    addColumn('totp_enabled', 'BOOLEAN DEFAULT 0');
+  });
+
   // Table des diagnostics
   db.run(`CREATE TABLE IF NOT EXISTS diagnostics (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,6 +86,17 @@ db.serialize(() => {
     cas_totaux INTEGER DEFAULT 0,
     taux_positivite REAL,
     UNIQUE(date, region, maladie_type)
+  )`);
+
+  // Table des refresh tokens (auth JWT rotation)
+  db.run(`CREATE TABLE IF NOT EXISTS refresh_tokens (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    token_hash TEXT NOT NULL,
+    expires_at DATETIME NOT NULL,
+    revoked_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
   )`);
 
   // Table des permissions (pour rôles avancés)

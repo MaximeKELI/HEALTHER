@@ -45,6 +45,9 @@ app.use(limiter);
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
+// Fichiers statiques (uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Routes
 const diagnosticsRoutes = require('./routes/diagnostics');
 const dashboardRoutes = require('./routes/dashboard');

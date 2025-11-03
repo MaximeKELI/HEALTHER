@@ -28,9 +28,14 @@ const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
   fileFilter: (req, file, cb) => {
-    const allowed = ['image/jpeg', 'image/png', 'image/jpg'];
+    const allowed = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
     if (allowed.includes(file.mimetype)) return cb(null, true);
-    cb(new Error('Type de fichier non supporté'));
+    if (file.mimetype === 'application/octet-stream') {
+      const ext = path.extname(file.originalname || '').toLowerCase();
+      const allowedExt = ['.jpg', '.jpeg', '.png', '.webp'];
+      if (allowedExt.includes(ext)) return cb(null, true);
+    }
+    cb(new Error('Type de fichier non supporté. Utilisez JPEG, PNG ou WebP'));
   }
 });
 
@@ -137,7 +142,16 @@ router.post('/', authenticateToken, async (req, res) => {
 
 // Nouvelle route: création via upload de fichier image (multipart/form-data, protégée par JWT)
 // champ fichier: image_file; autres champs texte: user_id, maladie_type, ...
-router.post('/upload', authenticateToken, upload.single('image_file'), async (req, res) => {
+// Wrapper multer pour renvoyer 400 en cas d'erreur d'upload
+router.post('/upload', authenticateToken, (req, res, next) => {
+  upload.single('image_file')(req, res, function(err) {
+    if (err) {
+      console.error('Erreur upload diagnostic (multer):', err);
+      return res.status(400).json({ error: err.message || 'Erreur upload' });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const body = req.body || {};
     // Utiliser user_id du token JWT si fourni, sinon celui du body

@@ -10,18 +10,23 @@ import 'analytics_screen.dart';
 import 'diagnostic_screen.dart';
 import 'prediction_screen.dart';
 import 'map_heatmap_screen.dart';
+import 'lab_results_screen.dart';
 import 'gamification_screen.dart';
 import 'notifications_screen.dart';
 import 'global_search_screen.dart';
 import 'barcode_scanner_screen.dart';
 import 'voice_assistant_screen.dart';
+import 'contact_tracing_screen.dart';
 import 'ocr_prescription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dashboard_patient_screen.dart';
 import 'realtime_dashboard_screen.dart';
+import 'video_consultation_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/responsive_helper.dart';
+import 'medication_reminders_screen.dart';
 import '../widgets/quick_actions_fab.dart';
 import '../services/haptic_feedback_service.dart';
 import '../services/keyboard_shortcuts_service.dart';
@@ -204,6 +209,93 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: _showHelp,
               tooltip: 'Aide (Ctrl+/)',
             ),
+            if (isDesktop)
+              PopupMenuButton<String>(
+                tooltip: 'Plus de pages',
+                onSelected: (value) {
+                  switch (value) {
+                    case 'realtime':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const RealtimeDashboardScreen()));
+                      break;
+                    case 'chatbot':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatbotScreen()));
+                      break;
+                    case 'gamification':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const GamificationScreen()));
+                      break;
+                    case 'voice':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const VoiceAssistantScreen()));
+                      break;
+                    case 'heatmap':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const MapHeatmapScreen()));
+                      break;
+                    case 'barcode':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => BarcodeScannerScreen(onBarcodeScanned: (b, f) {})));
+                      break;
+                    case 'analytics':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const AnalyticsScreen()));
+                      break;
+                    case 'ocr':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const OCRPrescriptionScreen()));
+                      break;
+                    case 'prediction':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const PredictionScreen()));
+                      break;
+                    case 'alerts':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const AlertsScreen()));
+                      break;
+                    case 'gallery':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const GalleryScreen()));
+                      break;
+                    case 'quiz':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const QuizScreen()));
+                      break;
+                    case 'profile':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen()));
+                      break;
+                    case 'settings':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsScreen()));
+                      break;
+                    case 'video':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const VideoConsultationScreen(consultationId: 1, doctorId: 1, patientId: 1)));
+                      break;
+                    case 'lab':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const LabResultsScreen()));
+                      break;
+                    case 'meds':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const MedicationRemindersScreen()));
+                      break;
+                    case 'contact':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const ContactTracingScreen()));
+                      break;
+                    case 'patientDashboard':
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const DashboardPatientScreen()));
+                      break;
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(value: 'realtime', child: Text('Dashboard Temps Réel')),
+                  const PopupMenuItem(value: 'chatbot', child: Text('Chatbot IA')),
+                  const PopupMenuItem(value: 'gamification', child: Text('Gamification')),
+                  const PopupMenuItem(value: 'voice', child: Text('Assistant Vocal IA')),
+                  const PopupMenuItem(value: 'heatmap', child: Text('Carte Heatmap')),
+                  const PopupMenuItem(value: 'barcode', child: Text('Scanner Code-barres')),
+                  const PopupMenuItem(value: 'analytics', child: Text('Analytics & Rapports')),
+                  const PopupMenuItem(value: 'ocr', child: Text('Scan Prescription')),
+                  const PopupMenuItem(value: 'prediction', child: Text('Prédiction Épidémique')),
+                  const PopupMenuItem(value: 'alerts', child: Text('Alertes Proactives')),
+                  const PopupMenuItem(value: 'gallery', child: Text('Galerie de Photos')),
+                  const PopupMenuItem(value: 'quiz', child: Text('Quiz Éducatif')),
+                  const PopupMenuItem(value: 'video', child: Text('Vidéoconsultation')),
+                  const PopupMenuItem(value: 'lab', child: Text('Résultats Labo')),
+                  const PopupMenuItem(value: 'meds', child: Text('Rappels Médication')),
+                  const PopupMenuItem(value: 'contact', child: Text('Contact Tracing')),
+                  const PopupMenuItem(value: 'patientDashboard', child: Text('Dashboard Patient')),
+                  const PopupMenuDivider(),
+                  const PopupMenuItem(value: 'profile', child: Text('Profil')),
+                  const PopupMenuItem(value: 'settings', child: Text('Paramètres')),
+                ],
+              ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -313,10 +405,12 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                   CircleAvatar(
                     radius: 30,
                     backgroundColor: Theme.of(context).colorScheme.primary,
@@ -362,7 +456,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                ],
+                  ],
+                ),
               ),
             ),
             ListTile(
