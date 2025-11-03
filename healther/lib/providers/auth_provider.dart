@@ -23,22 +23,33 @@ class AuthProvider with ChangeNotifier {
       final userId = prefs.getInt('user_id');
       final token = prefs.getString('jwt_token');
       final refreshToken = prefs.getString('refresh_token');
-      
+
+      // D'abord restaurer les tokens dans l'ApiService pour éviter 401
+      if (token != null) {
+        _apiService.setToken(token);
+      }
+      if (refreshToken != null) {
+        _apiService.setRefreshToken(refreshToken);
+      }
+
       if (userId != null) {
         try {
           _currentUser = await _apiService.getUser(userId);
-          
-          // Restaurer les tokens
-          if (token != null) {
-            _apiService.setToken(token);
-          }
-          if (refreshToken != null) {
-            _apiService.setRefreshToken(refreshToken);
-          }
-          
           notifyListeners();
         } catch (e) {
-          // Si l'utilisateur n'existe plus, nettoyer les données
+          // Si 401 malgré tout, tenter un refresh silencieux puis recharger
+          try {
+            if (refreshToken != null) {
+              final refreshed = await _apiService.refreshAccessToken(refreshToken);
+              if (refreshed) {
+                _currentUser = await _apiService.getUser(userId);
+                notifyListeners();
+                return;
+              }
+            }
+          } catch (_) {}
+
+          // Nettoyage si échec
           print('Erreur chargement utilisateur: $e');
           await prefs.remove('user_id');
           await prefs.remove('jwt_token');
