@@ -139,7 +139,16 @@ class OCRService {
 
   /// Libérer les ressources
   Future<void> dispose() async {
-    await _textRecognizer.close();
+    // OCR non disponible sur Linux desktop
+    if (Platform.isLinux) {
+      return;
+    }
+    
+    try {
+      await _textRecognizer.close();
+    } catch (e) {
+      print('Erreur dispose OCR: $e');
+    }
   }
 }
 

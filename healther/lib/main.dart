@@ -96,6 +96,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GamificationProvider()),
         ChangeNotifierProvider(create: (_) => RealtimeStatsService()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider.value(value: VoiceAssistantService()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {

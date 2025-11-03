@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'api_service.dart';
+import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -39,24 +40,40 @@ class VoiceAssistantService with ChangeNotifier {
   }
 
   Future<void> _initializeTTS() async {
-    await _tts.setLanguage(_currentLanguage);
-    await _tts.setSpeechRate(0.5);
-    await _tts.setVolume(1.0);
-    await _tts.setPitch(1.0);
+    // TTS non disponible sur Linux desktop
+    if (Platform.isLinux) {
+      print('TTS non disponible sur Linux');
+      return;
+    }
+    
+    try {
+      await _tts.setLanguage(_currentLanguage);
+      await _tts.setSpeechRate(0.5);
+      await _tts.setVolume(1.0);
+      await _tts.setPitch(1.0);
 
-    _tts.setCompletionHandler(() {
-      _isSpeaking = false;
-      notifyListeners();
-    });
+      _tts.setCompletionHandler(() {
+        _isSpeaking = false;
+        notifyListeners();
+      });
 
-    _tts.setErrorHandler((msg) {
-      _isSpeaking = false;
-      notifyListeners();
-    });
+      _tts.setErrorHandler((msg) {
+        _isSpeaking = false;
+        notifyListeners();
+      });
+    } catch (e) {
+      print('Erreur initialisation TTS: $e');
+    }
   }
 
   /// Parler un texte (avec option Gemini audio natif)
   Future<void> speak(String text, {String? language, bool useGemini = false}) async {
+    // TTS non disponible sur Linux desktop
+    if (Platform.isLinux) {
+      print('TTS non disponible sur Linux: $text');
+      return;
+    }
+    
     try {
       if (language != null && language != _currentLanguage) {
         await _tts.setLanguage(language);
@@ -101,44 +118,57 @@ class VoiceAssistantService with ChangeNotifier {
 
   /// Démarrer l'écoute vocale
   Future<bool> startListening({String? language}) async {
-    if (_isListening) return false;
-
-    final available = await _speech.initialize(
-      onStatus: (status) {
-        if (status == 'done' || status == 'notListening') {
-          _isListening = false;
-          notifyListeners();
-        }
-      },
-      onError: (error) {
-        _isListening = false;
-        notifyListeners();
-        onSpeechError?.call(error.errorMsg);
-      },
-    );
-
-    if (!available) {
+    // Speech-to-text non disponible sur Linux desktop
+    if (Platform.isLinux) {
+      print('Speech-to-text non disponible sur Linux');
       return false;
     }
+    
+    if (_isListening) return false;
 
-    _isListening = true;
-    notifyListeners();
-
-    await _speech.listen(
-      onResult: (result) {
-        if (result.finalResult) {
-          _lastRecognizedText = result.recognizedWords;
+    try {
+      final available = await _speech.initialize(
+        onStatus: (status) {
+          if (status == 'done' || status == 'notListening') {
+            _isListening = false;
+            notifyListeners();
+          }
+        },
+        onError: (error) {
           _isListening = false;
           notifyListeners();
-          onSpeechResult?.call(result.recognizedWords);
-        }
-      },
-      localeId: language ?? _currentLanguage,
-      listenFor: const Duration(seconds: 10),
-      pauseFor: const Duration(seconds: 3),
-    );
+          onSpeechError?.call(error.errorMsg);
+        },
+      );
 
-    return true;
+      if (!available) {
+        return false;
+      }
+
+      _isListening = true;
+      notifyListeners();
+
+      await _speech.listen(
+        onResult: (result) {
+          if (result.finalResult) {
+            _lastRecognizedText = result.recognizedWords;
+            _isListening = false;
+            notifyListeners();
+            onSpeechResult?.call(result.recognizedWords);
+          }
+        },
+        localeId: language ?? _currentLanguage,
+        listenFor: const Duration(seconds: 10),
+        pauseFor: const Duration(seconds: 3),
+      );
+
+      return true;
+    } catch (e) {
+      print('Erreur startListening: $e');
+      _isListening = false;
+      notifyListeners();
+      return false;
+    }
   }
 
   /// Arrêter l'écoute
