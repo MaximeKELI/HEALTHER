@@ -1,4 +1,4 @@
-const db = require('../db');
+const { dbGet } = require('../config/database');
 
 /**
  * Service pour les alertes proactives basées sur seuils
@@ -88,12 +88,8 @@ class AlertService {
         params.push(maladieType);
       }
       
-      return new Promise((resolve, reject) => {
-        db.get(query, params, (err, row) => {
-          if (err) reject(err);
-          else resolve(row || {});
-        });
-      });
+      const row = await dbGet(query, params);
+      return row || {};
     } catch (error) {
       console.error('Erreur récupération stats:', error);
       return {};

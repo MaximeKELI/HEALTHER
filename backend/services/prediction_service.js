@@ -1,4 +1,4 @@
-const db = require('../db');
+const { dbAll } = require('../config/database');
 
 /**
  * Service pour la prédiction épidémique avec IA
@@ -73,12 +73,7 @@ class PredictionService {
       
       query += ' GROUP BY DATE(created_at) ORDER BY date ASC';
       
-      const rows = await new Promise((resolve, reject) => {
-        db.all(query, params, (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows);
-        });
-      });
+      const rows = await dbAll(query, params);
       
       return rows;
     } catch (error) {
